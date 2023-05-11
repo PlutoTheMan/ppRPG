@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            {{ msg }}
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="my-2 p-1 border border-slate-400" type="submit">Submit</button>
+            </form>
+        </section>
+    </div>
+{% endblock %}

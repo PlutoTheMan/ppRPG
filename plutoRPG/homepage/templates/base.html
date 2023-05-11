@@ -1,0 +1,203 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/f875ce2e63.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <title>PlutoRPG - Online Browser RPG</title>
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        .test { border: 1px solid red }
+    </style>
+    {% load static %}
+<body class="bg-slate-900">
+    <div class="container shadow-xl mx-auto my-5">
+        {% block 'nav' %}
+        <nav class="px-5 py-4 bg-slate-700 shadow-2xl text-center border-slate-400 rounded-sm border">
+            <ul class="tracking-wide font-semibold grid grid-cols-12 gap-1">
+                <li class="border-2 col-start-1 col-end-2 border-slate-600 shadow-md drop-shadow-md">
+                    <a href="/" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-home mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Home</span>
+                    </a>
+                </li>
+
+                <li class="border-2 col-start-2 col-end-3 border-slate-600 shadow-md drop-shadow-md">
+                    <a href="/play" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-gamepad mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Play</span>
+                    </a>
+                </li>
+
+                <li class="border-2 col-start-5 border-slate-600 shadow-md drop-shadow-md">
+                    <a href="/worldmap" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-earth-europe mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">World Map</span>
+                    </a>
+                </li>
+
+                <li class="border-2  border-slate-600 shadow-md drop-shadow-md">
+                    <a href="/monsters" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-ghost mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Monsters</span>
+                    </a>
+                </li>
+
+                <li class="border-2  border-slate-600 shadow-md drop-shadow-md">
+                    <a href="/quests" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-wand-sparkles mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Quests</span>
+                    </a>
+                </li>
+
+                <li class="border-2  border-slate-600 shadow-md drop-shadow-md">
+                     <a href="/classes" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-hat-wizard mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Classes</span>
+                    </a>
+                </li>
+
+                <li class="border-2 border-slate-600 shadow-md drop-shadow-md">
+                    <a href="/equipment" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-sack-xmark mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Equipment</span>
+                    </a>
+                </li>
+
+                <li class="col-start-12 border-2 border-slate-600 shadow-md drop-shadow-md">
+                    {% if not user.is_authenticated %}
+                    <a href="/login" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-door-closed mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Login</span>
+                    </a>
+                    {% else %}
+                    <a href="/logout" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                        <i class="fa-solid fa-xl fa-door-closed mb-4" style="color: #FFFFFF;"></i>
+                        <span class="block text-sm">Logout</span>
+                    </a>
+                    {% endif %}
+                </li>
+            </ul>
+            {% if msg_error %}
+                <p class="text-red-600 text-left my-0 pt-2">{{ msg_error }}</p>
+            {% endif %}
+        </nav>
+
+        {% endblock %}
+
+        <main class="grid grid-cols-12 gap-3 my-3">
+            {% block 'aside-left' %}
+            <aside class="col-start-1 col-end-3 bg-slate-600 border-slate-400 rounded-sm border">
+                {% if user.is_authenticated %}
+                <section class="p-5">
+                    <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Your account</h3>
+                    <ul class="tracking-wide font-semibold">
+                        <li class="border-2 col-start-4 col-end-7 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/character_manager" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-book" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Characters</span>
+                            </a>
+                        </li>
+
+                        <li class="border-2 col-start-7 col-end-10 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/logout" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-door-closed mb-4" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+                {% endif %}
+                <section class="p-5">
+                    <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Stay updated</h3>
+                    <ul class="tracking-wide font-semibold">
+                        <li class="border-2 col-start-4 col-end-7 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/patchnotes" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-book" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Patch Notes</span>
+                            </a>
+                        </li>
+
+                        <li class="border-2 col-start-7 col-end-10 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/devlogs" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-chess-king mb-4" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Dev Logs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </aside>
+            {% endblock %}
+
+            {% block 'main' %}
+            <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+
+            </div>
+            {% endblock %}
+
+            {% block 'aside-right' %}
+            <aside class="col-start-11 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
+                <section class="p-5">
+                    <header class="text-center">
+                        <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Top 5 Players</h3>
+                    </header>
+
+                    <ul class="text-left">
+                        <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-amber-500"></i><a class="nickname font-semibold text-blue-700" href="#">Pawel</a>, lvl 21, Warrior</li>
+                        <li class="bg-slate-700 px-2"><i class="fa-solid fa-trophy mr-1 text-stone-400"></i><a class="nickname font-semibold text-blue-700" href="#">Romuland</a> lvl 13, Archer</li>
+                        <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-orange-950"></i><a class="nickname font-semibold text-blue-700" href="#">Pluto</a>, lvl 2, Kittymancer</li>
+                        <li class="bg-slate-700 px-2"><a class="nickname font-semibold text-blue-700" href="#">Geralt</a>, lvl 1, Archer</li>
+                        <li class="bg-slate-500 px-2"><a class="nickname font-semibold text-blue-700" href="#">Hodin Rood</a>, lvl 1, Archer</li>
+                    </ul>
+                </section>
+
+                <section class="p-5">
+                    <header class="text-center">
+                        <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Socials</h3>
+                    </header>
+                    <div class="grid grid-cols-2 py-2 gap-5">
+                        <figure class="text-center py-3 bg-slate-700">
+                            <img class="mx-auto h-10" src="{% static 'icon_discord.png' %}" alt="My image">
+                            <figcaption class="text-center text-neutral-300">Discord</figcaption>
+                        </figure>
+
+                        <figure class="text-center py-3 bg-slate-700">
+                            <img class="mx-auto h-10" src="{% static 'icon_facebook.png' %}" alt="My image">
+                            <figcaption class="text-center text-neutral-300">Fanpage</figcaption>
+                        </figure>
+                    </div>
+                </section>
+
+                <section class="p-5">
+                    <header class="text-center">
+                        <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Power Gamers ( per 24h )</h3>
+                    </header>
+
+                    <ul class="text-left">
+                        <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-stone-400"></i><a class="nickname font-semibold text-blue-700" href="#">Romuland</a> 1393 exp</li>
+                        <li class="bg-slate-700 px-2"><i class="fa-solid fa-trophy mr-1 text-amber-500"></i><a class="nickname font-semibold text-blue-700" href="#">Pawel</a> 1122 exp</li>
+                        <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-orange-950"></i><a class="nickname font-semibold text-blue-700" href="#">Pluto</a> 540 exp</li>
+                        <li class="bg-slate-700 px-2"><a class="nickname font-semibold text-blue-700" href="#">Geralt</a> 0 exp</li>
+                        <li class="bg-slate-500 px-2"><a class="nickname font-semibold text-blue-700" href="#">Hodin Rood</a> 0 exp</li>
+                    </ul>
+                </section>
+            </aside>
+            {% endblock %}
+
+        </main>
+
+        <footer class="bg-slate-700 shadow-indigo-500 text-center italic border-slate-400 rounded-sm border">
+            Copyright <span class="font-semibold">PlutoRPG</span> 2023. All rights reserved.
+        </footer>
+
+    </div>
+</body>
+</html>

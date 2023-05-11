@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <header class="text-center">
+                <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Welcome {% if user.is_authenticated %} {{ user }}! {% endif %}</h3>
+            </header>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 py-2 px-4">
+                <p>PlutoRPG is an addicting online RPG game.</p>
+                <p>Create your character and conquer the world of Plutoland!</p>
+            </article>
+
+        </section>
+
+        <section class="p-5">
+            <header class="text-center">
+                <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold"><i class="fa-solid fa-skull mx-2"></i>Event - Haunted Cemetery</h3>
+            </header>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 border-b-0 p-5">
+                <div class="border-slate-900 border bg-slate-500 p-4 flex">
+                    <div class="basis-4/5 flex flex-col">
+                        <p class="bg-slate-700 text-neutral-200 py-2 px-4 mb-2"><span class="text-stone-100">Darkness returns. The dark lady has been awaken!</span></p>
+                        <div class="basis-full  bg-slate-600 flex flex-col">
+                            <p class="py-2 px-4 basis-1/4">Players have faced unholy monsters with ease. <br>To challenge the heroes of Plutoland, Dark Lady has risen to lead Undeads and conquer Earth again.<br><br>
+                            <ul class="py-2 px-4 basis-1/3">
+                                <p><b>Changes</b>:</p>
+                                <li class="px-2">All the monsters on Cemetery has been buffed.</li>
+                                <li class="px-2">Chance loot an unholy mace on burial grounds.</li>
+                                <li class="px-2">New level of the Crpyt have opened.</li>
+                                <li class="px-2"> +30% experience from Undeads. Dark Lady may appear once per 2 hours.</li>
+                            </ul>
+                            <p class="py-2 px-4 basis-1/4">After Dark Lady is killed, all the players get +50% extra gold for 1 hour. Event lasts till 14th May 2023. Have fun!</p>
+                        </div>
+                    </div>
+
+                    <figure class="basis-1/5 flex ms-3 shadow-md flex-wrap gap-3" >
+                        <div class="w-full">
+                            <img class="h-full w-full" src="{% static 'event_cemetery.png' %}" alt="My image">
+                        </div>
+
+                        <figcaption class="bg-slate-600 w-full flex flex-wrap content-center ">
+                            <i class="text-2xl fa-solid fa-skull text-center w-full text-neutral-900 my-auto"></i>
+                            <span class="text-center w-full"><b>Banshee</b></span>
+                        </figcaption>
+                    </figure>
+
+                </div>
+            </article>
+        </section>
+
+        <section class="p-5">
+            <header class="text-center">
+                <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold"><i class="fa-solid fa-note-sticky mx-2"></i>Latest News</h3>
+            </header>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 border-b-0 p-5">
+                <div class="border-slate-900 border bg-slate-500 p-4 flex">
+                    <img class="basis-1/5 me-3 shadow-md" src="{% static 'news_003.png' %}" alt="My image">
+                    <div class="basis-4/5 flex flex-col">
+                        <p class="bg-slate-700 text-neutral-200 py-2 px-4 mb-2"><span class="text-stone-100">New character class: Kittymancer!</span></p>
+                        <div class="basis-full  bg-slate-600 flex flex-col">
+                            <p class="py-2 px-4 basis-full">New mage support class is out!<br><br>
+                                Summon mighty kittens to fight by your side, curse the enemies and buff your teammates.<br><br>Class recommended to experienced players!</p>
+                            <p class="bg-slate-700 px-4 py-1"><span class="">Written by <b>Pluto</b> on 7th May, 2023</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 border-b-0 p-5">
+                <div class="border-slate-900 border bg-slate-500 p-4 flex">
+                    <img class="basis-1/5 me-3 shadow-md" src="{% static 'news_002.png' %}" alt="My image">
+                    <div class="basis-4/5 flex flex-col">
+                        <p class="bg-slate-700 text-neutral-200 py-2 px-4 mb-2"><span class="text-stone-100">Beta gameplay testers needed</span></p>
+                        <div class="basis-full  bg-slate-600 flex flex-col">
+                            <p class="py-2 px-4 basis-full">If you are interested in developing the game - apply through the <a class="text-blue-700 font-semibold" href="#">form</a>.</p>
+                            <p class="bg-slate-700 px-4 py-1"><span class="">Written by <b>Pluto</b> on 7th May, 2023</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 border-b-0 p-5">
+                <div class="border-slate-900 border bg-slate-500 p-4 flex">
+                    <img class="basis-1/5 me-3 shadow-md" src="{% static 'news_001.png' %}" alt="My image">
+                    <div class="basis-4/5 flex flex-col">
+                        <p class="bg-slate-700 text-neutral-200 py-2 px-4 mb-2"><span class="text-stone-100">Game launching plans</span></p>
+                        <div class="basis-full  bg-slate-600 flex flex-col">
+                            <p class="py-2 px-4 basis-full">There are no plans launching the server for players anytime soon. Stay patient.</p>
+                            <p class="bg-slate-700 px-4 py-1"><span class="">Written by <b>Pluto</b> on 7th May, 2023</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+    </div>
+{% endblock %}

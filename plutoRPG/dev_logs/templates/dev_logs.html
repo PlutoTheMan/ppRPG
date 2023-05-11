@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <header class="text-center">
+                <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Devlog - 9th May, 2023</h3>
+            </header>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 py-2 px-4">
+                <header class=""><span class="font-bold">Jaki jest mój pomysł?</span> - krótki opis Twojego pomysłu na projekt (maksymalnie 2 zdania).</header>
+                <blockquote class="px-2 italic text-sm">Stworzenie przeglądarkowej gry online RPG.</blockquote>
+
+                <header class="mt-2"><span class="font-bold">Jaki problem rozwiązuje?</span> - jednozdaniowy opis problemu, który chcesz rozwiązać (jeżeli taki jest).</header>
+                <blockquote class="px-2 italic text-sm">Darmowe RPG są do kitu, bo content się szybko wyczerpuje, moja gra zapewni niekończącą się zawartość.</blockquote>
+
+                <header class="mt-2"><span class="font-bold">Jaki dokładnie mam pomysł?</span> - tutaj opisz szczegóły swojego pomysłu.</header>
+                <blockquote class="px-8 italic text-sm">
+                    <ul class="list-disc">
+                        <li>Przeglądarkowa gra 2D, którą szybko można odpalić z urządzenia mobilnego / komputera. Render na canvasie.</li>
+                        <li>Poruszamy się po kratkach (WSAD) / myszka.</li>
+                        <li>Gra skupia się na grindowaniu i rozwoju swojej postaci, questy opcjonalne.</li>
+                        <li>Dungeony / questy z poziomem trudnośći nieskończenie skalowalnym, z których gracz zdobędzie eq dostosowane do ich poziomu.</li>
+                        <li>0 contentu pay to win.</li>
+                        <li>Na stronie zdobędziemy podstawowe informacje o grze, możemy też handlować z innymi graczami.</li>
+                        <li>Minigry w grze, typu szachy. Podchodzimy do stołu, czekamy na przeciwnika. Na głownym czacie może pojawiać się wiadomość.</li>
+                    </ul>
+                </blockquote>
+
+                <header class="mt-2 text-lg"><span class="font-bold text-red-600">Funkcjonalności</span></header>
+                <blockquote class="px-8 italic">
+                    <header class=""><span class="text-lg font-bold text-orange-600">Website</span></header>
+                    <ul class="list-disc text-sm px-8">
+                        <li>System rejestracji i logowania</li>
+                        <li>Newsy wczytywane z bazy danych</li>
+                        <li>Guest / Player / Moderator / Admin </li>
+                        <ul class="list-disc px-8">
+                            <li><span class="text-blue-700">Guest</span> - przegląd newsów i contentu, brak możliwości gry.</li>
+                            <li><span class="text-orange-700">Player</span> - Guest + dostęp do contentu gry.</li>
+                            <li><span class="text-red-700">Moderator</span> - Player + możliwość pisania / edytowania / kasowania newsów.</li>
+                        </ul>
+                        <li class="">
+                            Przegląd contentu - Monsters, Quests, Classes, Equipment
+                            <ul class="list-decimal px-8 text-sm">
+                                <li>Informacje znajdują się w osobnych plikach JSON.</li>
+                                <li>Przy starcie servera ładujemy zawartość z pliku jako obiekt.</li>
+                                <li>W widokach generujemy odpowiedni content - sparsowane pliki JSON.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <header class=""><span class="text-lg font-bold text-orange-600">Gra - GUI</span></header>
+                    <ul class="list-disc text-sm px-8">
+                        <li>Dostęp tylko przy byciu zalogowanym.</li>
+                        <li>Pierwsze okno - wybór / tworzenie nowej postaci</li>
+                    </ul>
+
+                    <header class=""><span class="text-lg font-bold text-orange-600">Gra - Content</span></header>
+                    <ul class="list-disc text-sm px-8">
+
+                    </ul>
+                </blockquote>
+
+            </article>
+
+            <article class="border-slate-900 border bg-slate-500 border-t-0 py-2 px-4">
+                <header class=""><span class="font-bold">Zasady zaliczenia</span></header>
+                <ul class="list-disc text-sm px-8">
+                    <li class="text-green-400">Musi być aplikacją webową, napisaną w Django.</li>
+                    <li>Musi posiadać minimalnie 5 modeli.</li>
+                    <li class="text-green-400">Musi mieć bazę danych PostgreSQL.</li>
+                    <li>W bazie powinny znajdować się co najmniej 3 tabele i 2 relacje między tabelami.</li>
+                    <li>W projekcie muszą zostać wykorzystane co najmniej relacje jeden do wielu i wiele do wielu.</li>
+                    <li class="text-green-400">W aplikacji powinno znajdować się minimum 5 widoków.</li>
+                    <li class="text-green-400">Aplikacja powinna mieć co najmniej jeden widok dostępny tylko dla zalogowanego użytkownika (używając Django Auth system).</li>
+                    <li class="text-green-400">Aplikacja powinna posiadać przynajmniej jeden formularz, obsługiwany metodą POST.</li>
+                    <li>Główne funkcjonalności aplikacji, powinny być pokryte testami (co najmniej 3 testy jednostkowe napisane przy użyciu pytest'a). Do każdego widoku powinny być co najmniej dwa testy.</li>
+                    <li>Każda klasa i funkcja powinna posiadać przynajmniej jednolinijkową dokumentację.</li>
+                </ul>
+            </article>
+        </section>
+    </div>
+{% endblock %}
+{% block 'aside-right' %}{% endblock %}
