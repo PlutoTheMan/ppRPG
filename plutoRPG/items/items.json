@@ -1,0 +1,4 @@
+{
+  "1": {"name": "Knife", "slot": 0, "atk": 2, "type": 1},
+  "2": {"name": "Wooden Shield", "slot": 1, "def":  2}
+}

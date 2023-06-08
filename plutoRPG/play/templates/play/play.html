@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block 'styles' %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'game.css' %}">
+{% endblock %}
+
+{% block 'nav' %}
+    <nav class="px-5 py-4 bg-slate-700 shadow-2xl text-center border-slate-400 rounded-sm border">
+        <ul class="tracking-wide font-semibold grid grid-cols-12 gap-1">
+            <li class="border-2 col-start-1 col-end-2 border-slate-600 shadow-md drop-shadow-md">
+                <a href="/" class="uppercase block bg-slate-500 hover:bg-slate-400 py-2">
+                    <i class="fa-solid fa-xl fa-home mb-4" style="color: #FFFFFF;"></i>
+                    <span class="block text-sm">Home</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block 'aside-left' %}{% endblock %}
+{% block 'main' %}
+
+
+    <div class="col-start-1 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+
+            <div class="content">
+
+                <canvas class="bg-slate-500" id="canvas_game">
+
+                </canvas>
+
+<!--                <div class="bg-slate-600" id="canvas-hide-left">-->
+
+<!--                </div>-->
+
+<!--                <div class="bg-slate-600" id="canvas-hide-right">-->
+
+<!--                </div>-->
+
+<!--                <div class="bg-slate-600" id="canvas-hide-top">-->
+
+<!--                </div>-->
+
+<!--                <div class="bg-slate-600" id="canvas-hide-bottom">-->
+
+<!--                </div>-->
+
+                <div class="content_wrap ">
+                    <canvas id="canvas_ground">
+
+                    </canvas>
+
+                    <canvas id="canvas_items">
+
+                    </canvas>
+
+                    <div class="p-0 m-0" id="game_grid">
+
+                    </div>
+
+                    <canvas id="canvas_players">
+
+                    </canvas>
+
+                    <div class="" id="inventory">
+                        <div class="equipment test p-2">
+<!--                            <p class="mb-2 test text-neutral-200">Player Inventory</p>-->
+<!--                            <div class="eq_left-hand">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+<!--                            <div class="eq_right-hand">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+<!--                            <div class="eq_legs">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+<!--                            <div class="eq_boots">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+<!--                            <div class="eq_belt">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+<!--                            <div class="eq_ring">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+<!--                            <div class="eq_amulet">-->
+<!--                                <div></div>-->
+<!--                            </div>-->
+                        </div>
+
+
+                        <div class="bag">
+                            <p class="m-4 mx-5 bg-slate-500 ">Player Bag</p>
+                            <div data-id="0" class="bag_0">
+                                <img src="{% static 'sprites/weapons.png' %}" draggable=true>
+                            </div>
+
+                            <div data-id="1" class="bag_1">
+                                <img draggable=true>
+                            </div>
+
+                            <div data-id="2" class="bag_2">
+                                <img draggable=true>
+                            </div>
+
+                            <div data-id="3" class="bag_3">
+                                <img draggable=true>
+                            </div>
+
+                            <div data-id="4" class="bag_4">
+                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                            </div>
+
+                            <div data-id="5" class="bag_5">
+                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                            </div>
+
+                            <div data-id="6" class="bag_6">
+                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                            </div>
+
+                            <div data-id="7" class="bag_7">
+                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chat_box" class="bg-slate-900/80 hidden py-2">
+                    <div id="chat-btn-close" class="mb-2">x</div>
+                    <div id="messages"></div>
+                </div>
+
+
+
+
+
+
+                <ul class="character_list">
+                    <p class="pt-3">Choose your character:</p>
+                </ul>
+
+            </div>
+
+
+        </section>
+    </div>
+{% endblock %}
+
+{% block 'scripts' %}
+<script src="{% static 'classes/sprites.js' %}"></script>
+<script src="{% static 'classes/screen.js' %}"></script>
+<script src="{% static 'classes/worldmap.js' %}"></script>
+<script src="{% static 'classes/inventory.js' %}"></script>
+<script src="{% static 'classes/player.js' %}"></script>
+<script src="{% static 'classes/item.js' %}"></script>
+<script src="{% static 'classes/chat.js' %}"></script>
+<script src="{% static 'connection.js' %}"></script>
+<script src="{% static 'game.js' %}"></script>
+{% endblock %}
+
+{% block 'aside-right' %}{% endblock %}
+

@@ -10,12 +10,15 @@
     <script src="https://kit.fontawesome.com/f875ce2e63.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <title>PlutoRPG - Online Browser RPG</title>
+    {% block 'styles' %}
+    {% endblock %}
     <style>
         * {
             font-family: 'Inter', sans-serif;
             box-sizing: border-box;
         }
         .test { border: 1px solid red }
+        textarea { width: 100%; padding: 100px; }
     </style>
     {% load static %}
 <body class="bg-slate-900">
@@ -102,8 +105,15 @@
                     <ul class="tracking-wide font-semibold">
                         <li class="border-2 col-start-4 col-end-7 border-slate-600 shadow-md drop-shadow-md">
                             <a href="/character_manager" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
-                                <i class="fa-solid fa-xl fa-book" style="color: #FFFFFF;"></i>
+                                <i class="fa-solid fa-xl fa-person  " style="color: #FFFFFF;"></i>
                                 <span class="px-2 text-sm">Characters</span>
+                            </a>
+                        </li>
+
+                        <li class="border-2 col-start-7 col-end-10 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/notes" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-clipboard mb-4" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Notes</span>
                             </a>
                         </li>
 
@@ -134,6 +144,24 @@
                         </li>
                     </ul>
                 </section>
+
+                <section class="p-5">
+                    <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Community</h3>
+                    <ul class="tracking-wide font-semibold">
+                        <li class="border-2 col-start-4 col-end-7 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/characters" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-person" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Player List</span>
+                            </a>
+                        </li>
+                        <li class="border-2 col-start-4 col-end-7 border-slate-600 shadow-md drop-shadow-md">
+                            <a href="/guilds" class="uppercase block bg-slate-500 hover:bg-slate-400 py-3 px-3">
+                                <i class="fa-solid fa-xl fa-people-group" style="color: #FFFFFF;"></i>
+                                <span class="px-2 text-sm">Guilds</span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
             </aside>
             {% endblock %}
 
@@ -145,6 +173,12 @@
 
             {% block 'aside-right' %}
             <aside class="col-start-11 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
+                <section class="p-5">
+                    <header class="text-center">
+                        <h3 class="bg-red-700 border-slate-900 border font-bold"><a class="block" href="credits">Credits</a></h3>
+                    </header>
+                </section>
+
                 <section class="p-5">
                     <header class="text-center">
                         <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Top 5 Players</h3>
@@ -198,6 +232,8 @@
             Copyright <span class="font-semibold">PlutoRPG</span> 2023. All rights reserved.
         </footer>
 
+        {% block 'scripts' %}
+        {% endblock %}
     </div>
 </body>
 </html>

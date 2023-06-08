@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-=(3iujfp3^nvs55o$o8%5qi7(ou#(n3_q!lm6-)n1+u48u7w$y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["77.181.161.246"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,7 +49,11 @@ INSTALLED_APPS = [
     'dev_logs',
     'quests',
     'characters',
+    'notes',
+    'guilds',
 ]
+
+ASGI_APPLICATION = "plutoRPG.asgi.application"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +84,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'plutoRPG.wsgi.application'
+CHANNEL_LAYERS = {
 
+    'default': {
+        # IN MEMORY CHANNEL LAYER IS FOR TESTING ONLY, NOT DEVELOPMENT!
+        # 'BACKEND': 'channels.layers.InMemoryChannelLayer'
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

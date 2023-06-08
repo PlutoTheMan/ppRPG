@@ -1,0 +1,14 @@
+{ "columns":4,
+ "image":"sprites\/house_floor_misc.png",
+ "imageheight":128,
+ "imagewidth":128,
+ "margin":0,
+ "name":"house_floor_misc",
+ "spacing":0,
+ "tilecount":16,
+ "tiledversion":"1.9.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.9"
+}

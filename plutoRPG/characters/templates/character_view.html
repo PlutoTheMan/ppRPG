@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <ul class="bg-slate-700 p-2">
+                <li class="bg-slate-400">Name: {{ character.name }}</li>
+                <li class="bg-slate-500">Level: {{ character.level }}</li>
+                <li class="bg-slate-400">Experience: {{ character.experience }}</li>
+                <li class="bg-slate-500">Vocation: {{ character.get_vocation_display }}</li>
+                <li class="bg-slate-400">Created at: {{ character.date_created }}</li>
+                <li class="bg-slate-500">Skills:</li>
+                <li class="bg-slate-400">Fist fighting: {{ character.skills.fist }}</li>
+                <li class="bg-slate-500">Club fighting: {{ character.skills.club }}</li>
+                <li class="bg-slate-400">Sword fighting: {{ character.skills.sword }}</li>
+                <li class="bg-slate-500">Axe fighting: {{ character.skills.axe }}</li>
+                <li class="bg-slate-400">Shielding: {{ character.skills.shielding }}</li>
+            </ul>
+
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{ "columns":4,
+ "image":"sprites\/1.png",
+ "imageheight":128,
+ "imagewidth":128,
+ "margin":0,
+ "name":"ground_1",
+ "spacing":0,
+ "tilecount":16,
+ "tiledversion":"1.9.2",
+ "tileheight":32,
+ "tiles":[
+        {
+         "id":0,
+         "properties":[
+                {
+                 "name":"walkable",
+                 "type":"bool",
+                 "value":false
+                }]
+        }],
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.9"
+}

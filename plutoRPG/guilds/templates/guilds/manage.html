@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">{{ guild.name }}</h3>
+            <form method="post" action="">
+                {% csrf_token %}
+                <label for="name">Invite player:</label>
+                <input name="name" id="name" type="text">
+                <button class="border border-slate-400 hober:bg-slate-400 bg-slate-500 mx-2 p-1 px-2" type="submit">Invite</button>
+            </form>
+            {% if msg_success %}
+            <p class="text-green-600">{{ msg_success }}</p>
+            {% endif %}
+            {% if msg_err %}
+            <p class="text-red-600">{{ msg_err }}</p>
+            {% endif %}
+            <ul class="bg-slate-700 p-2 mt-4">
+                <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Leader</h3>
+                <li class="border border-slate-400 p-0"><a class="{{'hover:bg-slate-300 bg-slate-400, hover:bg-slate-300 bg-slate-500' }} block p-1 m-0 h-full" href="/characters/{{ guild.leader.name }}">{{ guild.leader.name }}, level {{ guild.leader.level }}, {{ guild.leader.get_vocation_display}}</a></li>
+                <h3 class="my-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Members</h3>
+                {% for member in members %}
+                    <li class="border border-slate-400 p-0"><a class="{{ forloop.counter|divisibleby:2|yesno:'hover:bg-slate-300 bg-slate-400, hover:bg-slate-300 bg-slate-500' }} block p-1 m-0 h-full" href="/guilds/{{ guild.name }}">Name: {{ guild.name }}, Leader: {{ guild.leader.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+{% endblock %}

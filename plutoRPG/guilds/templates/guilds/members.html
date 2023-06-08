@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">{{ name }}</h3>
+            <ul class="bg-slate-700 p-2">
+                <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Leader</h3>
+                <li class="border border-slate-400 p-0"><a class="{{'hover:bg-slate-300 bg-slate-400, hover:bg-slate-300 bg-slate-500' }} block p-1 m-0 h-full" href="/characters/{{ leader.name }}">{{ leader.name }}, level {{ leader.level }}, {{ leader.get_vocation_display}}</a></li>
+                <h3 class="my-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Members</h3>
+                {% for member in members %}
+                    {% if forloop.counter <= 10 %}
+                    <li class="border border-slate-400 p-0"><a class="{{ forloop.counter|divisibleby:2|yesno:'hover:bg-slate-300 bg-slate-400, hover:bg-slate-300 bg-slate-500' }} block p-1 m-0 h-full" href="/guilds/{{ guild.name }}">Name: {{ guild.name }}, Leader: {{ guild.leader.name }}</a></li>
+                    {%  endif %}
+                {% endfor %}
+            </ul>
+
+        <ul class="text-center mt-2">
+            {% if page > 1 %}
+            <li class="inline px-5"><a href="{% if page > 1 %}{{ page|add:"-1" }}{% else %}1{% endif %}" class="hover:bg-slate-700 p-1 px-2 bg-slate-800 text-blue-400">Previous Page</a></li>
+            {% endif %}
+            {% if characters|length > 10 %}
+            <li class="inline px-5"><a href="{{ page|add:"1" }}" class="hover:bg-slate-700 p-1 px-2 bg-slate-800 text-blue-400">Next Page</a></li>
+            {% endif %}
+        </ul>
+
+        </section>
+    </div>
+{% endblock %}

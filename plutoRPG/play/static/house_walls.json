@@ -1,0 +1,14 @@
+{ "columns":2,
+ "image":"sprites\/house_walls.png",
+ "imageheight":256,
+ "imagewidth":128,
+ "margin":0,
+ "name":"house_walls",
+ "spacing":0,
+ "tilecount":8,
+ "tiledversion":"1.9.2",
+ "tileheight":64,
+ "tilewidth":64,
+ "type":"tileset",
+ "version":"1.9"
+}

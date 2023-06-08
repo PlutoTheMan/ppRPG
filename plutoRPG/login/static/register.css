@@ -1,0 +1,15 @@
+form label {
+    display: block;
+    font-weight: bold;
+    color: orange;
+}
+
+.errorlist {
+    font-size: small;
+    color: #ce1616;
+}
+
+.helptext {
+    font-style: italic;
+    font-size: small;
+}

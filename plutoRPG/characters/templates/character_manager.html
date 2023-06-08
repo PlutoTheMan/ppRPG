@@ -3,7 +3,38 @@
 {% block 'main' %}
     <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
         <section class="p-5">
-            :D
+            {%if msg_success %}
+                <p class="text-green-500">Character created successfully.</p>
+            {%  endif %}
+
+            <form class="border border-slate-400 p-2" method="post" action="">
+                <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">New character</h3>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="border border-slate-300 p-1 mt-2" type="submit">Create</button>
+            </form>
+
+
+            <ul class="my-2 border border-slate-400 p-2">
+                <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">Your characters</h3>
+                {% if char_list %}
+                    {% for character in char_list %}
+                        <li class="{{ forloop.counter|divisibleby:2|yesno:'bg-slate-400, bg-slate-500' }} border border-slate-400 px-2 p-0">
+                            Name: {{ character.name }}, Level:{{ character.level }}, Vocation: {{ character.get_vocation_display }}
+                            <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-slate-800" href="/characters/{{ character.name }}">View</a></button>
+                            <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-orange-800" href="{{ character.name }}/">Edit</a></button>
+                            {% if not character.guild %}
+                            <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-green-900" href="{{ character.name }}/guild/create/">Create Guild</a></button>
+                            {% else %}
+                            <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-green-900" href="/guilds/{{ character.guild.name }}">View Guild</a></button>
+                            {% endif %}
+                            <button class="py-2 pe-1"><a href="{{ character.name }}/delete/" class="text-neutral-200 p-1 m-0 bg-red-800">Delete</a></button>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p>No characters on your account yet.</p>
+                {% endif %}
+            </ul>
         </section>
     </div>
 {% endblock %}

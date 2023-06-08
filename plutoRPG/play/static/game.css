@@ -1,0 +1,287 @@
+#canvas_game {
+    margin: auto;
+    /*border: 1px solid black;*/
+    z-index: 99;
+}
+
+#canvas_players, #canvas_ground, #canvas_items {
+    /*border: 1px solid blue;*/
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0;
+    margin: 0 auto;
+
+}
+
+.inventory-border {
+    border-left: 3px ridge orangered;
+}
+
+#inventory{
+    /*border-left: 2px ridge black;*/
+    font-size: 15px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0;
+    /*margin: 0;*/
+    margin-left: auto;
+    margin-right: 0;
+    /*border: 2px solid green;*/
+    z-index: 110;
+    background-color: rgba(16, 13, 13, 0.92);
+    max-width: 0;
+    transition: 0.15s;
+}
+
+.equipment div {
+    display: inline-block;
+    padding: 3px;
+}
+.equipment div div{
+    width: 40px;
+    height: 40px;
+    background-color: white;
+}
+
+#inventory .bag{
+    /*border: 2px solid #9124b7;*/
+    height: 300px;
+}
+
+#inventory .bag div{
+    display: inline-block;
+    padding: 3px;
+}
+
+.bag div:hover {
+    background-color: #6c6c6c;
+    cursor: pointer;
+    /*border: 3px solid green;*/
+}
+
+.bag div {
+    color: #100d0d;
+}
+
+.bag div {
+    font-size: 0;
+    width: 64px;
+    height: 64px;
+    background-color: #6e6464;
+    position:relative;
+    overflow: hidden;
+    padding: 0;
+}
+
+.bag div img {
+    max-width: none;
+    position: absolute;
+    transform: scale(2);
+    left: 64px;
+    top: 64px;
+}
+.bag p {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+
+#canvas_ground{
+    z-index: 95;
+    border: 2px solid blue;
+    left: -64px;
+    top: -64px;
+}
+
+#canvas_items{
+    border: 2px solid saddlebrown;
+    z-index: 96;
+    left: -64px;
+    top: -64px;
+}
+
+#canvas_players{
+    z-index: 100;
+    left: -64px;
+    top: -64px;
+}
+
+
+.content_wrap{
+    /*border: 3px solid red;*/
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    overflow: hidden;
+    font-size: 0;
+    padding: 0;
+    /*margin: 0;*/
+}
+
+#game_grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    z-index: 102;
+    padding: 0;
+    font-size: 0;
+    left: -64px;
+    top: -64px;
+}
+
+.content {
+    position: relative;
+    text-align: center;
+    /*overflow: hidden;*/
+}
+
+.character_list {
+    position: absolute;
+    top: 0px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 102;
+    padding: 80px 60px;
+}
+
+.character_list li {
+    width: 85%;
+    margin: auto;
+    background-color: #100d0d;
+    color: #e3dcdc;
+    padding: 3px;
+    margin-top: 10px;
+}
+
+.character_list li:hover {
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#chat {
+    height: 50px;
+    padding: 15px;
+}
+
+#chat input {
+    padding: 2px;
+    width: 100%;
+    height: 20px;
+}
+
+.chat_wrapper {
+    border: 2px solid blue;
+    position: absolute;
+    bottom: 0px;
+}
+
+#chat_box {
+    border-top: 3px solid black;
+    position: absolute;
+    bottom: 64px;
+    z-index: 103;
+    margin: auto;
+    left: 0;
+    right: 0;
+    flex: 0 0 auto;
+    max-width: 576px;
+    padding: 10px 25px;
+    text-align: left;
+
+}
+
+#chat-btn-close {
+    background-color: #ce1616;
+    color: #100d0d;
+    width: 23px;
+    height: 23px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+}
+
+#chat-btn-close:hover {
+    background-color: #88ce1a;
+    color: #070606;
+}
+
+#messages {
+    width: 100%;
+    max-height: 78px;
+    overflow-y: auto;
+}
+
+.border-inner-grid{
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+}
+
+#game_grid div:hover{
+    border: 2px solid greenyellow;
+    background-color: rgba(173, 255, 47, 0.5);
+    cursor: pointer;
+}
+
+.border-last-right{
+    border-right: 1px solid black;
+}
+
+.border-last-bottom{
+    border-bottom: 1px solid black;
+}
+
+.dragenter{
+    border: 2px solid darkorange;
+    background-color: rgba(255, 84, 0, 0.5);
+}
+
+#canvas-hide-left, #canvas-hide-right{
+    position: absolute;
+    width: 160px;
+    top: 0px;
+    z-index: 102;
+    margin: auto;
+    height: 100%;
+    right: 0;
+}
+
+#canvas-hide-left{
+    left: -736px;
+}
+#canvas-hide-right{
+    left: 736px;
+}
+
+#canvas-hide-top, #canvas-hide-bottom{
+    position: absolute;
+    width: 100%;
+    z-index: 102;
+    margin: auto;
+    height: 64px;
+    right: 0;
+}
+#canvas-hide-top{
+    top: 0px;
+}
+
+#canvas-hide-bottom{
+    bottom: 0px;
+}
+
+
