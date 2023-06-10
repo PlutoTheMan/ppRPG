@@ -21,31 +21,14 @@
 {% block 'aside-left' %}{% endblock %}
 {% block 'main' %}
 
-
     <div class="col-start-1 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
         <section class="p-5">
 
             <div class="content">
-
+                {% if server_enabled %}
                 <canvas class="bg-slate-500" id="canvas_game">
 
                 </canvas>
-
-<!--                <div class="bg-slate-600" id="canvas-hide-left">-->
-
-<!--                </div>-->
-
-<!--                <div class="bg-slate-600" id="canvas-hide-right">-->
-
-<!--                </div>-->
-
-<!--                <div class="bg-slate-600" id="canvas-hide-top">-->
-
-<!--                </div>-->
-
-<!--                <div class="bg-slate-600" id="canvas-hide-bottom">-->
-
-<!--                </div>-->
 
                 <div class="content_wrap ">
                     <canvas id="canvas_ground">
@@ -139,8 +122,16 @@
 
 
                 <ul class="character_list">
+                    {% if characters %}
                     <p class="pt-3">Choose your character:</p>
+                    {% else %}
+                    <p>Create your first <a class="font-bold text-blue-300" href="/character_manager/">character</a>!</p>
+                    {% endif %}
                 </ul>
+
+            {% else %}
+                Redis server is not available. Contact admin.
+            {% endif %}
 
             </div>
 

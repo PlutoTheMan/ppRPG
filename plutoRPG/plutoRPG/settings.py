@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-=(3iujfp3^nvs55o$o8%5qi7(ou#(n3_q!lm6-)n1+u48u7w$y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["77.181.161.246"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -105,7 +105,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'PASSWORD': 'coderslab',
-        'HOST': '127.0.0.1'
+        'HOST': '127.0.0.1',
+        'TEST': {
+            'NAME': 'test_pprpg'
+        }
     }
 }
 

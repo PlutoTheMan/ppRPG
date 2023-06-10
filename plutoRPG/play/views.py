@@ -2,34 +2,76 @@ from django.shortcuts import render, redirect
 from characters.models import Character, Account
 import json
 from django.http import HttpResponse
+from django.shortcuts import reverse
 from .consumers import ChatConsumer
 from .map import worldmap
+from redis import Redis
 
+# Just a function, not a view
+def fix_game_bugs_after_crash():
+    """In case players stayed logged in in after crash - set them logged out."""
+    logged_in_chars = Character.objects.filter(logged_in_game=True)
+    for char in logged_in_chars:
+        char.logged_in_game = False
+        char.save()
 def game(request):
+    """
+    Handles request to enter Play page.
+
+    :param request: Django request object.
+    :return: (HttpResponse) redirect to homepage or game page.
+    """
+    try:
+        r = Redis('127.0.0.1', socket_connect_timeout=1)
+        r.ping()
+    except Exception as e:
+        ctx = {'server_enabled': False}
+        return render(request, "play/play.html", ctx)
+
     user = request.user
     if user.is_authenticated:
         account = Account.get_from_user(user)
         char_list = Character.objects.filter(user=account.id)
-        ctx = {'characters': char_list}
+        ctx = {
+            'content': 'game',
+            'server_enabled': True
+        }
+
+        if char_list:
+            ctx['characters'] = char_list
+
         return render(request, "play/play.html", ctx)
     else:
-        return redirect('/login')
-
+        return redirect(reverse('login'))
 def get_characters(request):
+    """
+    Returns user's list of characters.
+
+    :param request: Django request object.
+    :return: (JSON) list of characters.
+    """
     if not request.user.is_authenticated:
-        return None
+        return HttpResponse()
 
     account = Account.get_from_user(request.user)
     characters = Character.objects.filter(user=account.id)
-    # print(characters)
-    # values = character.values_list('name', 'level', 'banned')[0]
     char_list = list(characters.values_list('name', 'level', 'banned', 'logged_in_game'))
 
-    return HttpResponse(json.dumps(char_list))
-
+    if len(char_list) == 0:
+        return HttpResponse()
+    else:
+        return HttpResponse(json.dumps(char_list))
 def select_character(request, name):
+    """
+    Make changes in world map, character instance and ChatConsumer object if player allowed to play.
+    Informs player if allowed to play.
+
+    :param request: Django request object.
+    :param name: Name of selected character
+    :return: (JSON) Selected character info or deny info.
+    """
     if not request.user.is_authenticated:
-        return None
+        return HttpResponse()
 
     account = Account.get_from_user(request.user)
     if not account.owns_character(name):
@@ -56,7 +98,6 @@ def select_character(request, name):
         bag['bag_1'] = {}
         bag['bag_1']['game_id'] = character.equipment.bag_1.game_id
 
-    # print(bag)
     content = {
         'name': character.name,
         'banned': character.banned,
@@ -67,8 +108,6 @@ def select_character(request, name):
         'pos_y': character.pos_y,
         'direction': character.direction,
         'bag': bag,
-        # 'equipment': character.equipment,
-        # 'favourites': character.favourites,
     }
 
     response = {
@@ -85,22 +124,30 @@ def select_character(request, name):
             'character': character,
             'socket': ChatConsumer.all_users[account]['consumer']
         }
+    # Lazy way to make it work...
     consumer = ChatConsumer.all_users[account]['consumer']
-    # So you can use character functions from consumers class and consumer function from character class...
-    # Probably need to be reorganized
     consumer.character = character
     character.consumer = consumer
 
     worldmap.update_vision_map(character)
 
     return HttpResponse(json.dumps(response))
-
 def get_map_tile_sets(request):
+    """
+    Return game tile sets info.
+
+    :param request: Django request object.
+    :return: (JSON) Tile sets info.
+    """
     if not request.user.is_authenticated:
-        return None
+        return HttpResponse()
 
     response = {
         'tile_set': worldmap.tiles_dict,
     }
 
     return HttpResponse(json.dumps(response))
+
+
+# Just in case of crash happening
+fix_game_bugs_after_crash()

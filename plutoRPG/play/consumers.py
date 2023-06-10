@@ -23,13 +23,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         try:
-            print("consumers..")
-            print(self.character.name)
-            print(self.character.equipment.bag_0)
-        except Exception as e:
-            print(e)
-
-        try:
             worldmap.remove_player_from_map_vision_map(self.character)
         except Exception as e:
             print("Couldn't remove vision map on logout")
@@ -61,11 +54,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         ChatConsumer.all_users.pop(self.channel_name, None)
         ChatConsumer.all_users.pop(self.account, None)
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-        # print("TESTING AFTER DISCONNECT:")
-        # print(ChatConsumer.all_users)
 
     async def send_connection_message(self):
-        print("!")
         try:
             msg = f'{self.character.name} has joined.'
             await self.channel_layer.group_send(self.room_group_name, {
@@ -79,7 +69,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message = str(text_data_json["message"])
             if len(message) == 0 or len(message) > 100:
                 return False
-            if self.character.can_chat_globaly():
+            if self.character.can_chat_globally():
                 await self.channel_layer.group_send(self.room_group_name, {
                     "type": "request_chat_global", "message": message, "author": self.character.name
                 })
@@ -118,10 +108,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }))
         elif "drag" in text_data_json:
             await self.character.attempt_item_drag(text_data_json['drag'])
-            # print(text_data_json)
 
     async def request_self_view(self):
-        print(f'{self.character.name} requested view')
         pos_x = self.character.pos_x
         pos_y = self.character.pos_y
         pos = f'{str(pos_x)},{str(pos_y)}'

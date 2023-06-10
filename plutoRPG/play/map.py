@@ -2,15 +2,14 @@ import json
 import math
 
 class WorldMap:
+    """Representing game map and game state"""
     def __init__(self):
-        print("Loading items...")
         json_items = open('items/items.json')
         self.items = {}
         self.raw_items = json.load(json_items)
         self.parse_items()
         json_items.close()
 
-        print("Loading map...")
         json_data = open('play/static/worldmap.json')
         self.raw_map = json.load(json_data)
         json_data.close()
@@ -28,40 +27,47 @@ class WorldMap:
 
         self.tiles_dict = {}
         self.parse_sprites()
-        print("Loading map done.")
 
     async def move_item_from_ground_to_ground(self, character, data):
+        """
+        Attempt moving item from pos A to pos B on the map by player after data validation
+
+        :param character: Character instance
+        :param data: Drag data
+        :return: True if drag completed successfully, False if not
+        """
         pos_from = f"{data['source_value']['x']},{data['source_value']['y']}"
         pos_to = f"{data['target_value']['x']},{data['target_value']['y']}"
 
         if 'items' not in self.gameMap[pos_from]:
-            print("No items in source square")
             return False
 
         try:
             items = self.gameMap[pos_from]['items']
             # Remove from source...
-            # print(self.gameMap[pos_from])
             last_item_id = list(items.keys())[-1]
             moved_item_info = self.gameMap[pos_from]['items'][last_item_id]
             del self.gameMap[pos_from]['items'][last_item_id]
             if not self.gameMap[pos_from]['items']:
                 del self.gameMap[pos_from]['items']
-            # print(self.gameMap[pos_from])
             # Add to destination...
-            print(self.gameMap[pos_to])
             if 'items' not in self.gameMap[pos_to]:
                 self.gameMap[pos_to]['items'] = {}
             self.gameMap[pos_to]['items'][last_item_id] = moved_item_info
-            print(self.gameMap[pos_to])
         except Exception as e:
             print(e)
             return False
 
-        print("successfull")
         await character.consumer.send_view_to_players(pos_to)
 
     async def move_item_from_equipment_to_ground(self, character, data):
+        """
+        Attempt moving item from inventory position to ground position on the map by player after data validation
+
+        :param character: Character instance
+        :param data: Drag data
+        :return: True if drag completed successfully, False if not
+        """
         from_eq_pos = data['source_value']
         pos_to = f"{data['target_value']['x']},{data['target_value']['y']}"
         parsed_key = f"bag_{from_eq_pos}"
@@ -69,7 +75,7 @@ class WorldMap:
         try:
             item = getattr(character.equipment, parsed_key)
         except Exception:
-            print("Couldnt get item from player equipment")
+            print("Couldn't get item from player equipment")
             return False
 
         try:
@@ -79,24 +85,28 @@ class WorldMap:
             self.gameMap[pos_to]['items'][item.pk] = {"id": item.pk, "game_id": item.game_id}
             # Removes item from backpack...
             setattr(character.equipment, parsed_key, None)
-            print("live throw...")
-            print(character.name)
-            print(character.equipment.bag_0)
             await character.consumer.send_view_to_players(pos_to)
         except Exception as e:
             print(e)
             return False
 
     def parse_items(self):
+        """
+        Parsing items from JSON file
+        :return: None
+        """
         for item in self.raw_items:
             self.items[item] = self.raw_items[item]
 
     def parse_sprites(self):
+        """
+        Parsing items from JSON file
+        :return: None
+        """
         for tile_set in self.raw_map['tilesets']:
             tile_set_data = open(f"play/static/{tile_set['source']}")
             tile_data = json.load(tile_set_data)
-            # print(tile_data)
-            # print(tile_data['columns'])
+
             for n in range(0, tile_data['tilecount']):
                 tile_id = tile_set['firstgid'] + n
                 self.tiles_dict[tile_id] = {
@@ -118,10 +128,13 @@ class WorldMap:
                         for prop in properties:
                             self.tiles_dict[tile_id]['properties'][prop['name']] = prop['value']
 
-                # print(self.tiles_dict[tile_id])
             tile_set_data.close()
 
     def get_layers_data(self):
+        """
+        Made for easier readability
+        :return:
+        """
         ret = {}
         for layer in self.layers:
             ret[layer['name']] = layer['data']
@@ -129,6 +142,11 @@ class WorldMap:
         return ret
 
     def put_player_into_game_dict(self, character):
+        """
+        Puts player info on game map
+        :param character: Character instance
+        :return:
+        """
         if character.pos_x not in range(0, self.map_width):
             return False
 
@@ -147,6 +165,12 @@ class WorldMap:
         }
 
     def is_inside_map(self, x=0, y=0):
+        """
+        Checks if position is inside map boundaries.
+        :param x: (int), x_position
+        :param y: (int), y_position
+        :return: True or False
+        """
         if x not in range(0, self.map_width):
             return False
 
@@ -156,12 +180,15 @@ class WorldMap:
         return True
 
     def remove_player_from_map_vision_map(self, character):
-        # print("removing player from vision map")
-        # print(character)
+        """
+        Removes player from vision map
+        :param character: Character instance
+        :return: None
+        """
+
         first_x = character.pos_x - self.client_width // 2
         first_y = character.pos_y - self.client_height // 2
 
-        # print(self.vision_map)
         for x in range(first_x-1, first_x+self.client_width):
             for y in range(first_y-1, first_y+self.client_height):
                 if self.is_inside_map(x=x, y=y):
@@ -177,12 +204,22 @@ class WorldMap:
                     if not self.vision_map[t]:
                         del self.vision_map[t]
 
-        # print("\nafter:")
-        # print(self.vision_map)
 
     def update_vision_map(self, character, direction=5):
+        """
+        Changes vision map based on player movement
+
+        :param character: Character instance
+        :param direction: Direction player is moving
+        :return: None
+        """
         # 5 means out of 4 directions as default
         def update_vision_map_horizontal(pos_y):
+            """
+            Changes vision map based on player movement (#redundant #notime)
+            :param pos_y: (int) Y position
+            :return: None
+            """
             for pos_x in range(first_x, first_x + self.client_width):
                 if self.is_inside_map(x=pos_x, y=pos_y):
                     key_position = f"{pos_x},{pos_y}"
@@ -194,18 +231,19 @@ class WorldMap:
                         pass
 
         def update_vision_map_vertical(pos_x):
+            """
+            Changes vision map based on player movement (#redundant #notime)
+            :param pos_x: (int) X position
+            :return: None
+            """
             for pos_y in range(first_y, first_y + self.client_height):
                 if self.is_inside_map(x=pos_x, y=pos_y):
                     key_position = f"{pos_x},{pos_y}"
                     try:
-                        # print(f"before: {self.vision_map[key_position]}")
                         self.vision_map[key_position].remove(character.name)
-                        # print(f"after remove: {self.vision_map[key_position]}")
                         if not self.vision_map[key_position]:
-                            # print(f"deleted frin {key_position}")
                             del self.vision_map[key_position]
                     except Exception:
-                        # print(f"removal failed for {key_position}")
                         pass
 
         first_x = character.pos_x - self.client_width//2
@@ -236,6 +274,12 @@ class WorldMap:
             pass
 
     def remove_player_from_map_tile_hes_on(self, character):
+        """
+        Removes player from game map on his actual position
+
+        :param character: Character instance
+        :return: None
+        """
         tile = f"{character.pos_x},{character.pos_y}"
         del self.gameMap[tile]['players'][character.name]
 
@@ -243,6 +287,7 @@ class WorldMap:
             del self.gameMap[tile]['players']
 
     def parse_layers_for_game_dict(self):
+        """Parsing data for game map"""
         layer_data = self.get_layers_data()
         for layer_index, key in enumerate(layer_data):
             width = self.layers[layer_index]['width']
@@ -263,9 +308,13 @@ class WorldMap:
                             self.gameMap[t][layer_index] = {}
 
                         self.gameMap[t][layer_index] = {'ground_sprite': value}
-        print(self.gameMap['13,10'])
 
     def get_character_view(self, pos):
+        """
+        Gets character 9x9 (or 1 unit more for client correct display) view as JSON
+        :param pos: center position
+        :return: view as JSON
+        """
         pos_x = 0
         pos_y = 0
 

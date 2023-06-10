@@ -1,0 +1,24 @@
+[WEBSITE]
+    [KONTO]
+        - Rejestracja konta
+        - Logowanie / Wylogowanie
+    [GRACZ]
+        - Tworzenie postaci
+        - Usuwanie postaci
+        - Podgląd listy wszystkich graczy
+        - Podgląd konkretnego gracza
+    [GILDIE]
+        - Tworzenie gildii
+        - Usuwanie gildii
+        - Zapraszanie innych
+        - Podgląd innych gildii
+    [MISC]
+        - Notatki gracza
+[GRA]
+    [MAPA]
+        - Ładowanie mapy z plików wygenerowanych przez map edytor
+    [GRA]
+        - Multiplayer
+    [GRACZ]
+        - Chodzenie po mapie
+        - Wyswietlanie innych graczy i ich akcji

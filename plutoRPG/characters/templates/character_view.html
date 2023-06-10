@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block 'main' %}
+
     <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
         <section class="p-5">
+            {% if character %}
             <ul class="bg-slate-700 p-2">
                 <li class="bg-slate-400">Name: {{ character.name }}</li>
                 <li class="bg-slate-500">Level: {{ character.level }}</li>
@@ -16,7 +18,10 @@
                 <li class="bg-slate-500">Axe fighting: {{ character.skills.axe }}</li>
                 <li class="bg-slate-400">Shielding: {{ character.skills.shielding }}</li>
             </ul>
-
+            {% else %}
+            Character not found.
+            {% endif %}
         </section>
     </div>
+
 {% endblock %}

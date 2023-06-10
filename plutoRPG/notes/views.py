@@ -5,7 +5,14 @@ from .models import Note
 
 # Create your views here.
 class NotesView(View):
+    """Representing notes view"""
     def get(self, request):
+        """
+        Rendering notes page or homepage
+
+        :param request: Django request object.
+        :return: (HttpResponse) redirect to notes page or homepage.
+        """
         if request.user.is_authenticated:
             o = Note.objects.filter(author=request.user).first()
 
@@ -14,12 +21,18 @@ class NotesView(View):
             else:
                 notes_form = NotesForm()
             
-            ctx = {'form': notes_form}
+            ctx = {'form': notes_form, 'content': 'notes'}
             return render(request, 'notes.html', ctx)
         else:
             return redirect('homepage')
 
     def post(self, request):
+        """
+        Managing notes page
+
+        :param request: Django request object.
+        :return: (HttpResponse) redirect to notes page or homepage.
+        """
         if request.user.is_authenticated:
             notes_form = NotesForm(request.POST)
             if notes_form.is_valid():

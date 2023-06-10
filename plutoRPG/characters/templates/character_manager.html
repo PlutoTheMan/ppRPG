@@ -9,6 +9,7 @@
 
             <form class="border border-slate-400 p-2" method="post" action="">
                 <h3 class="mb-2 bg-orange-800 border-slate-900 border text-neutral-200 font-bold text-center">New character</h3>
+                <button id="random_name_generator" type="button" class="bg-yellow-500 mb-3 px-2 py-1">Generate Random Name</button>
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button class="border border-slate-300 p-1 mt-2" type="submit">Create</button>
@@ -22,7 +23,7 @@
                         <li class="{{ forloop.counter|divisibleby:2|yesno:'bg-slate-400, bg-slate-500' }} border border-slate-400 px-2 p-0">
                             Name: {{ character.name }}, Level:{{ character.level }}, Vocation: {{ character.get_vocation_display }}
                             <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-slate-800" href="/characters/{{ character.name }}">View</a></button>
-                            <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-orange-800" href="{{ character.name }}/">Edit</a></button>
+<!--                            <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-orange-800" href="{{ character.name }}/">Edit</a></button>-->
                             {% if not character.guild %}
                             <button class="py-2 px-1"><a class="text-neutral-200 p-1 m-0 bg-green-900" href="{{ character.name }}/guild/create/">Create Guild</a></button>
                             {% else %}
@@ -37,4 +38,31 @@
             </ul>
         </section>
     </div>
+
+    <script>
+        function generate_random_name(){
+            const adjectives = ["Excited", "Anxious", "Overweight", "Demonic", "Jumpy", "Squashed",
+                "Gargantuan","Broad", "Crooked", "Curved", "Deep", "Even","Excited", "Anxious", "Overweight", "Demonic",
+                "Jumpy", "Squashed", "Gargantuan","Broad", "Crooked", "Curved", "Deep", "Even", "Flat",
+                "Hilly", "Jagged", "Round", "Shallow", "Square", "Steep", "Straight", "Thick", "Thin", "Cooing",
+                "Deafening", "Faint", "Harsh", "Hissing", "Hushed", "Husky", "Loud", "Melodic",
+                "Moaning", "Mute", "Noisy", "Purring", "Quiet", "Raspy", "Screeching", "Shrill", "Silent", "Soft",
+                "Squeaky", "Squealing", "Thundering", "Voiceless", "Whispering"]
+
+            const nouns = ["Taco", "System", "Sphere", "Watermelon", "Burger", "Apple Pie", "Spider",
+                "Dragon", "Control", "Soda", "Barbie", "Watch", "Purple Pen", "Bill",
+                "Animal", "Hair", "Sunglasses", "Shirt", "Purse", "Towel", "Hat", "Camera",
+                "Bottle", "Photo", "Bone", "Brush", "Card"]
+
+            let first_name = adjectives[Math.floor(Math.random() * adjectives.length)]
+            let last_name = nouns[Math.floor(Math.random() * nouns.length)]
+
+            return `${first_name} ${last_name}`
+        }
+
+        input_name = document.querySelector("[name='name']")
+        document.querySelector("#random_name_generator").addEventListener("click", function(e){
+             input_name.value = generate_random_name()
+        })
+    </script>
 {% endblock %}

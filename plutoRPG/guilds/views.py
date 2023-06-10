@@ -3,8 +3,14 @@ from .models import Guild
 from characters.models import Account, Character
 from django.views import View
 
-# Create your views here.
 def view_guild(request, name):
+    """
+    Handles request to view guild
+
+    :param request: Django request object.
+    :param name: (string) name of the guild
+    :return: (HttpResponse) redirect to requested guild page / homepage.
+    """
     guild = Guild.objects.filter(name=name).first()
     if not guild:
         return redirect("homepage")
@@ -14,16 +20,33 @@ def view_guild(request, name):
         if account.owns_character(guild.leader.name):
             ctx["leader"] = True
     return render(request, "guilds/view_one.html", ctx)
-
 def view_all_guilds(request, page):
+    """
+    Handles request to view all guilds
+
+    :param request: Django request object.
+    :param page: (number) page, 10 guilds displayed per page.
+    :return: (HttpResponse) redirect to requested guild page.
+    """
     if int(page) < 1:
         return redirect('/characters/all/1')
+
     limit = int(page)*10
     guilds = Guild.objects.all().order_by('date_created').reverse()[limit-10:limit+1]
-    ctx = {'guilds': guilds, 'page': page}
-    return render(request, "guilds/list_page.html", ctx)
+    ctx = {'page': page}
+    if guilds is not None:
+        ctx['guilds'] = guilds
 
+    return render(request, "guilds/list_page.html", ctx)
 def view_guild_members(request, name):
+    """
+    Handles request to view guilds members
+
+    :param request: Django request object.
+    :param name: (string) name of the guild.
+    :return: (HttpResponse) redirect to requested guild page.
+    """
+
     guild = Guild.objects.filter(name=name).first()
     if not guild:
         return redirect("homepage")
@@ -37,9 +60,16 @@ def view_guild_members(request, name):
            'leader': leader
            }
     return render(request, "guilds/members.html", ctx)
-
 class ManageGuildView(View):
+    """Representing guild management"""
     def get(self, request, name):
+        """
+        Rendering guild management page or homepage
+
+        :param request: Django request object.
+        :param name: Name of the guild
+        :return: (HttpResponse) redirect to guild management page or homepage.
+        """
         if not request.user.is_authenticated:
             return redirect("homepage")
 
@@ -57,6 +87,13 @@ class ManageGuildView(View):
             return redirect("homepage")
 
     def post(self, request, name):
+        """
+        Trying to invite player to the guild.
+
+        :param request: Django request object.
+        :param name: (string) name of the guild
+        :return: (HttpResponse) redirect to guild management page or homepage.
+        """
         # Should be safe, since tepmlates use autoescape?
         player = request.POST.get('name', '')
         # is player at all?

@@ -4,6 +4,7 @@ from play.map import worldmap
 
 # Create your models here.
 class Character(models.Model):
+    """Representing account's character."""
 
     CHOICES_VOCATION = (
         (0, 'No Vocation'),
@@ -24,6 +25,13 @@ class Character(models.Model):
     direction = models.IntegerField(default=2)
 
     async def attempt_item_drag(self, data):
+        """
+        Checks if drag action made by player is allowed on the server side and may result in item position
+        change on game map and sending view to players. Returns None.
+
+        :param data: (dictionary), data send by player, should contain drag source (equipment, ground), drag target and positions.
+        :return: Returns None.
+        """
         parsed_info = self.drag_get_parsed_pos_if_allowed(data)
         if parsed_info:
             # Need to add item to the map here
@@ -33,6 +41,13 @@ class Character(models.Model):
                 await worldmap.move_item_from_equipment_to_ground(self, data)
 
     def drag_get_parsed_pos_if_allowed(self, data):
+        """
+        Validating data sent by player, called from attempt_item_drag method. Return parsed data
+        or False.
+
+        :param data: (dictionary), data send by player, should contain drag source (equipment, ground), drag target and positions.
+        :return: Return parsed data if validated correctly and drag is allowed or False.
+        """
         # Check if user send something stupid
         if 'source_type' not in data:
             return False
@@ -112,11 +127,21 @@ class Character(models.Model):
         return ret
 
     def has_guild(self):
+        """
+        Checks if player belongs to guild.
+
+        :return: True or False
+        """
         if hasattr(self, 'guild'):
             return True
         return False
 
     def is_guild_leader(self):
+        """
+        Checks if player is the guild leader.
+
+        :return: True when has guild and is a leader, False if not or doesn't have guild at all.
+        """
         if not self.has_guild():
             return False
         if self.guild.leader.pk == self.pk:
@@ -125,14 +150,30 @@ class Character(models.Model):
         return False
 
     def is_logged_in_game(self):
+        """
+        Checks if player is logged in game.
+
+        :return: Either True or False
+        """
         return self.logged_in_game
 
-    def can_chat_globaly(self):
+    def can_chat_globally(self):
+        """
+        Checks if player meet requirements to use in game global chat.
+
+        :return: True or False if not logged in or doesn't meet requirements.
+        """
         if self.is_logged_in_game() and self.level >= 1:
             return True
         return False
 
     def can_move(self, direction):
+        """
+        Validates direction data and compare current game state to check if player may move or not.
+
+        :param direction: (number), direction of the movement (top, right, bottom, left).
+        :return:
+        """
         # Correct direction send check
         if direction not in range(0, 4):
             return False
@@ -164,13 +205,18 @@ class Character(models.Model):
 
         # Is tile walkable #2? This is need to check STOP TILES from map editor
         # 2 means third layer on map editor, which is reserved for stop tiles
-        print(worldmap.gameMap[tile_parsed])
         if 2 in worldmap.gameMap[tile_parsed]:
             return False
 
         return True
 
     def move(self, direction):
+        """
+        Moves player on game map and send update the player and players around him.
+
+        :param direction: (number), direction of the movement (top, right, bottom, left).
+        :return: None
+        """
         self.remove_from_map(worldmap)
         if direction == 0:
             self.pos_y -= 1
@@ -187,9 +233,17 @@ class Character(models.Model):
         worldmap.update_vision_map(self, direction)
 
     def remove_from_map(self, game_map):
+        """
+        Remove player from the game map.
+
+        :param game_map: (dictionary) containing the state of game map.
+        :return:
+        """
         game_map.remove_player_from_map_tile_hes_on(self)
 
 class Skills(models.Model):
+    """Representing character's skills."""
+
     character = models.OneToOneField(Character, on_delete=models.CASCADE, primary_key=True)
     fist = models.CharField(default=1, max_length=4)
     sword = models.CharField(default=1, max_length=4)
@@ -198,7 +252,9 @@ class Skills(models.Model):
     shielding = models.CharField(default=1, max_length=4)
 
 class Item(models.Model):
-    # Not used in model definition
+    """Representing the item."""
+
+    # Choices_slot not used yet
     CHOICES_SLOT = (
         (0, 'Left Hand'),
         (1, 'Right Hand'),
@@ -212,14 +268,16 @@ class Item(models.Model):
     )
 
     CHOICES_ITEM = (
+        (0, 'Empty_Item'),
         (1, 'Knife'),
-        (2, 'Wooden Shield')
+        (2, 'Wooden Shield'),
     )
 
-    # game_id of 1 will represent Sword
+    # game_id of 1 will represent knife
     game_id = models.IntegerField(choices=CHOICES_ITEM, default=0)
 
 class Equipment(models.Model):
+    """Representing player's equipment"""
     character = models.OneToOneField(Character, on_delete=models.CASCADE, primary_key=True)
     left_hand = models.OneToOneField(Item, on_delete=models.CASCADE, null=True, related_name='left_hand')
     right_hand = models.OneToOneField(Item, on_delete=models.CASCADE, null=True, related_name='right_hand')
@@ -234,14 +292,27 @@ class Equipment(models.Model):
     bag_3 = models.OneToOneField(Item, on_delete=models.CASCADE, null=True, related_name='bag_3')
 
 class Account(User):
+    """Representing players account"""
     class Meta:
         proxy = True
 
     @classmethod
     def count_all(cls):
+        """
+        Counting all accounts created.
+
+        :return: (number) of accounts registered in database.
+        """
         return cls.objects.all().count()
+
     @classmethod
     def get_from_user(cls, user):
+        """
+        Returns Account instance from django User instance
+
+        :param user: Django user instance.
+        :return: Account instance if Django user exists
+        """
         try:
             # can `user` be manipulated by web user?
             ret = Account.objects.filter(pk=user.id).first()
@@ -250,6 +321,12 @@ class Account(User):
             return None
 
     def owns_character(self, name):
+        """
+        Checks if account has character with given name.
+
+        :param name: (string), name to be checked.
+        :return: True or False
+        """
         result = Character.objects.filter(user=self.pk, name=name).first()
         # name may be manipulated
         if result is not None:
@@ -257,10 +334,19 @@ class Account(User):
         return False
 
     def get_character(self, name):
+        """
+        Returns Character instance if belong to account.
+
+        :param name: (string), name to check.
+        :return: Character instance or None.
+        """
         result = Character.objects.filter(user=self.pk, name=name).first()
         if result is not None:
             return result
         return None
 
 class Favourites(models.Model):
+    """Representing player in game Vip List"""
+
+    # Not implemented yet.
     favourites = models.ManyToManyField(Character)

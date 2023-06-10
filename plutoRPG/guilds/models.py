@@ -3,6 +3,7 @@ from characters.models import Character
 
 # Create your models here.
 class Guild(models.Model):
+    """Representing Guild Model"""
     leader = models.OneToOneField(Character, on_delete=models.PROTECT)
     name = models.CharField(unique=True, max_length=40)
     members = models.ManyToManyField(Character, related_name='guild_members')
