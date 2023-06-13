@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic.base import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
 
 from homepage.views import index
 from play.views import game, get_characters, select_character, get_map_tile_sets
@@ -25,7 +27,7 @@ from monsters.views import monsters
 from classes.views import classes
 from equipment.views import equipment
 from login.views import LoginView, page_logout, RegisterView
-from patch_notes.views import patch_notes
+from patch_notes.views import patch_notes, AdminPatchNotesManager, AdminPatchNoteManager
 from dev_logs.views import dev_logs
 from quests.views import quests
 from notes.views import NotesView
@@ -40,6 +42,8 @@ from guilds.views import view_guild, view_all_guilds, view_guild_members, Manage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('manager_panel/patch_notes/', AdminPatchNotesManager.as_view(), name="admin_patch_notes"),
+    path('manager_panel/patch_notes/<int:_id>', AdminPatchNoteManager.as_view(), name="admin_patch_notes_edit"),
     path('credits/', display_credits, name="credits"),
     path('credits/download', download_credits_outfit, name="credits_download"),
     path('', index, name="homepage"),
@@ -75,4 +79,4 @@ urlpatterns = [
     path('guilds', RedirectView.as_view(url='/guilds/all/1'), name="all_guild"),
     path('guilds/<str:name>/manage', ManageGuildView.as_view(), name="guild_manage"),
     # path('guilds_manager/<str:name>', view_guild),
-]
+] + static(settings.IMG_URL, document_root=settings.IMG_ROOT)

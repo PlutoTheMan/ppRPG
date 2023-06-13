@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="my-2 p-0 bg-green-800 block"><a class="px-2">New Patch Note</a></button>
+            </form>
+        </section>
+
+        <section class="p-5">
+            {% if patch_notes %}
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                        <th>Text</th>
+                        <th>Visible</th>
+                    </tr>
+                {% for patch_note in patch_notes%}
+                    <form method="post" action="{{patch_note.pk}}">
+                        {% csrf_token %}
+                        <tr>
+                            <td>{{ patch_note.title }}</td>
+                            <td>{{ patch_note.author }}</td>
+                            <td>{{ patch_note.date_created }}</td>
+                            <td>{{ patch_note.text }}</td>
+                            <td>{{ patch_note.visible }}</td>
+                            <td><button class="border border-slate-300 p-1" type="submit">View/Edit</button></td>
+                        </tr>
+                    </form>
+                {% endfor %}
+                </table>
+            {% endif %}
+        </section>
+    </div>
+
+
+
+{% endblock %}

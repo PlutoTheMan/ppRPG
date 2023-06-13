@@ -1,9 +1,31 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block 'main' %}
     <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
         <section class="p-5">
-          Patch notes
+            {% for note in patch_notes %}
+            <article class="border-slate-900 border bg-slate-500 border-t-0 border-b-0 p-5">
+                <div class="border-slate-900 border bg-slate-500 p-4 flex">
+                    <div class="basis-1/5 me-3 shadow-md">
+                        <img class="w-full h-full" src="{{ note.image | cut:'patch_notes'}}" alt="My image">
+                    </div>
+
+                    <div class="basis-4/5 flex flex-col">
+                        <p class="bg-slate-700 text-neutral-200 py-2 px-4 mb-2"><span class="text-stone-100">{{ note.title }}</span></p>
+                        <div class="basis-full  bg-slate-600 flex flex-col">
+                            <p class="py-2 px-4 basis-full">
+                                {{ note.text|safe }}
+                            <p class="bg-slate-700 px-4 py-1"><span class="">Written by <b>{{ note.author|title }}</b> on {{ note.date_created }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+
+                {{ note.text }}
+                {{ note.text }}
+
         </section>
     </div>
 {% endblock %}

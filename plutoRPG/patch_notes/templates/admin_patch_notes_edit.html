@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if patch_note.image %}
+                    <img src="{{ patch_note.image | cut:'patch_notes'}}">
+                {% endif %}
+                <button name="edit" value="1" type="submit" class="my-2 p-0 bg-green-800 block"><a class="px-2">Edit</a></button>
+                <button name="delete" value="1" type="submit" class="my-2 p-0 bg-red-800 block"><a class="px-2">Delete</a></button>
+            </form>
+
+        </section>
+    </div>
+
+
+
+{% endblock %}

@@ -10,9 +10,17 @@ def index(request):
     :param request: Django request object.
     :return: (HttpResponse) rendering homepage.
     """
-    ctx = {'content': 'homepage'}
+    ctx = {
+        'content': 'homepage',
+        'superuser': False,
+    }
+
     if request.user:
         ctx['user'] = request.user
+
+    if request.user.is_superuser:
+        ctx['superuser'] = True
+
     return render(request, "index.html", ctx)
 def display_credits(request):
     """
