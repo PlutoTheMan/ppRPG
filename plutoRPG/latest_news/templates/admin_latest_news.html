@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block 'main' %}
+    <div class="col-start-3 col-end-11 bg-slate-600 border-slate-400 rounded-sm border">
+        <section class="p-5">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="my-2 p-0 bg-green-800 block"><a class="px-2">New Last News</a></button>
+            </form>
+        </section>
+
+        <section class="p-5">
+            {% if latest_news %}
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                        <th>Text</th>
+                        <th>Visible</th>
+                    </tr>
+                {% for latest_new in latest_news%}
+                    <form method="post" action="{{latest_new.pk}}">
+                        {% csrf_token %}
+                        <tr>
+                            <td>{{ latest_new.title }}</td>
+                            <td>{{ latest_new.author }}</td>
+                            <td>{{ latest_new.date_created }}</td>
+                            <td>{{ latest_new.text }}</td>
+                            <td>{{ latest_new.visible }}</td>
+                            <td><button class="border border-slate-300 p-1" type="submit">View/Edit</button></td>
+                        </tr>
+                    </form>
+                {% endfor %}
+                </table>
+            {% endif %}
+        </section>
+    </div>
+
+
+
+{% endblock %}

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'characters',
     'notes',
     'guilds',
+    'latest_news',
 ]
 
 ASGI_APPLICATION = "plutoRPG.asgi.application"

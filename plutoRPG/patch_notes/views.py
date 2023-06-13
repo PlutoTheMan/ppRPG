@@ -92,7 +92,6 @@ class AdminPatchNoteManager(View):
                     note.title = form_patch_note.title
                     note.text = form_patch_note.text
                     if form_patch_note.image:
-                        print(form_patch_note.image)
                         note.image = form_patch_note.image
                     note.save()
             elif delete:

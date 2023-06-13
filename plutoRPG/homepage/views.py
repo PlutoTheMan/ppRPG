@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
+from latest_news.models import LatestNews
 
 # Create your views here.
 def index(request):
@@ -10,8 +10,11 @@ def index(request):
     :param request: Django request object.
     :return: (HttpResponse) rendering homepage.
     """
+    latest_news = LatestNews.objects.all().order_by('-date_created')[:10]
+
     ctx = {
         'content': 'homepage',
+        'latest_news': latest_news,
         'superuser': False,
     }
 

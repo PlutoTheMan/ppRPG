@@ -28,6 +28,7 @@ from classes.views import classes
 from equipment.views import equipment
 from login.views import LoginView, page_logout, RegisterView
 from patch_notes.views import patch_notes, AdminPatchNotesManager, AdminPatchNoteManager
+from latest_news.views import AdminLatestNewsManager, AdminLatestNewManager
 from dev_logs.views import dev_logs
 from quests.views import quests
 from notes.views import NotesView
@@ -44,6 +45,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('manager_panel/patch_notes/', AdminPatchNotesManager.as_view(), name="admin_patch_notes"),
     path('manager_panel/patch_notes/<int:_id>', AdminPatchNoteManager.as_view(), name="admin_patch_notes_edit"),
+    path('manager_panel/latest_news/', AdminLatestNewsManager.as_view(), name="admin_latest_news"),
+    path('manager_panel/latest_news/<int:_id>', AdminLatestNewManager.as_view(), name="admin_latest_news_edit"),
     path('credits/', display_credits, name="credits"),
     path('credits/download', download_credits_outfit, name="credits_download"),
     path('', index, name="homepage"),
