@@ -57,6 +57,8 @@ let screen = ""
 let player_inventory = ""
 let worldmap = ""
 let game_chat = ""
+let ground = ""
+let mouse = ""
 
 
 async function getCharacters() {
@@ -106,80 +108,10 @@ getCharacters().then((response)=>response.json()).then((data)=>{
 let dragged_from = {x:0, y:0}
 let dragged_to = {x:0, y:0}
 
-function drawMapMesh(){
-
-    const game_grid = document.getElementById("game_grid")
-    for (let y=1; y <= y_squares; y++){
-        for (let x=1; x <= x_squares; x++){
-            const div = document.createElement("div")
-
-            div.classList.add('border-inner-grid', 'inline-block', 'm-0', 'p-0')
-            // For easy navigation on drag etc.
-            div.dataset.x = (x-1).toString()
-            div.dataset.y = (y-1).toString()
-            div.style.width = `${square_width}px`
-            div.style.height = `${square_height}px`
-
-            div.addEventListener("drag", event=>{
-                // dragged_from = {x: event.target.dataset.x, y: event.target.dataset.y}
-                dragged_from = screen.grid_tile_cord_to_real_pos({x: event.target.dataset.x, y: event.target.dataset.y})
-                event.preventDefault()
-            })
-
-            div.addEventListener("dragenter", event=>{
-                event.target.classList.add("dragenter")
-                main_player.inventory.drag_destination_type = "ground"
-
-                // console.log({x: event.target.dataset.x, y: event.target.dataset.y})
-                // Translating selected grid pos to real server pos..
-                dragged_to = screen.grid_tile_cord_to_real_pos({x: event.target.dataset.x, y: event.target.dataset.y})
-                event.preventDefault()
-            })
-
-            div.addEventListener("dragstart", event=>{
-                main_player.inventory.drag_source_type = "ground"
-            })
-
-            div.addEventListener("dragleave", event=>{
-                event.target.classList.remove("dragenter")
-                event.preventDefault()
-            })
-
-            div.addEventListener("dragend", event=>{
-                // console.log(main_player.inventory.drag_destination_type)
-                main_player.drag_drop(
-                    main_player.inventory.drag_source_type,
-                    main_player.inventory.drag_destination_type
-                )
-
-                event.preventDefault()
-            })
-
-            game_grid.append(div)
-            if (x==x_squares){
-                div.classList.add('border-last-right')
-            }
-
-            if (y==y_squares){
-                div.classList.add('border-last-bottom')
-            }
-
-        }
-
-        // ctx.moveTo(x, 0)
-        // ctx.lineTo(x, canvas.height)
-    }
-
-
-
-    ctx.stroke()
-}
-
-
 
 function loadGame(content){
     html_characters_list.remove()
-    drawMapMesh()
+    // drawMapMesh()
     worldmap = new Worldmap()
     screen = new Screen()
     player_inventory = new Inventory(content.bag)
@@ -192,13 +124,13 @@ function loadGame(content){
     worldmap.screen = screen
 
     game_chat = new Chat()
+    ground = new Ground()
+    mouse = new Mouse()
     window.requestAnimationFrame(animate)
 }
 
 function animate() {
-    // console.log(players)
     main_player.update()
-    // main_player.draw()
     window.requestAnimationFrame(animate);
 }
 

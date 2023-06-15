@@ -21,10 +21,17 @@ class Inventory {
         this.open = false
         this.init()
         this.dragging = false
+        this.dragged_from = null
+        this.dragged_to = null
+
+        this.mouse_on_inventory_id = null
+
         this.drag_source = null
         this.drag_source_type = null
         this.drag_destination_type = null
         this.drag_destination = null
+
+        this.mouse_on_inventory = false
     }
 
     init(){
@@ -37,34 +44,40 @@ class Inventory {
             let target_element = bag.children[0]
             context.put_blank_image(target_element)
 
-            bag.addEventListener("dragstart", event=>{
-                // console.log(event.target.parentElement.dataset.id)
-                context.dragged_source = event.target.parentElement.dataset.id
-                context.drag_source_type = "inventory"
-
-                context.dragging = true
-                event.dataTransfer.setDragImage(ghost_image, 0, 0)
-                event.target.classList.add("bg-slate-300")
+            bag.addEventListener("mouseenter", function(e){
+                context.mouse_on_inventory = true
+                context.mouse_on_inventory_id = e.target.dataset.id
+                ground.mouse_on_ground = false
             })
 
-            bag.addEventListener("dragenter", event=>{
-                context.drag_destination = event.target.parentElement.dataset.id
-                context.drag_destination_type = "inventory"
-            })
+            // bag.addEventListener("dragstart", event=>{
+            //     // console.log(event.target.parentElement.dataset.id)
+            //     context.dragged_source = event.target.parentElement.dataset.id
+            //     context.drag_source_type = "inventory"
+            //
+            //     context.dragging = true
+            //     event.dataTransfer.setDragImage(ghost_image, 0, 0)
+            //     event.target.classList.add("bg-slate-300")
+            // })
+            //
+            // bag.addEventListener("dragenter", event=>{
+            //     context.drag_destination = event.target.parentElement.dataset.id
+            //     context.drag_destination_type = "inventory"
+            // })
 
-            bag.children[0].addEventListener("dragend", event=>{
-                context.dragging = false
-                main_player.drag_drop(
-                    main_player.inventory.drag_source_type,
-                    main_player.inventory.drag_destination_type
-                )
-                event.target.classList.remove("bg-slate-300")
-            })
-
-
-            bag.children[0].addEventListener("drag", event=>{
-                event.dataTransfer.setDragImage(ghost_image, 0, 0);
-            })
+            // bag.children[0].addEventListener("dragend", event=>{
+            //     context.dragging = false
+            //     main_player.drag_drop(
+            //         main_player.inventory.drag_source_type,
+            //         main_player.inventory.drag_destination_type
+            //     )
+            //     event.target.classList.remove("bg-slate-300")
+            // })
+            //
+            //
+            // bag.children[0].addEventListener("drag", event=>{
+            //     event.dataTransfer.setDragImage(ghost_image, 0, 0);
+            // })
         })
         this.update()
     }

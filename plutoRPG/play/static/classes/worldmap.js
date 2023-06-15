@@ -235,22 +235,23 @@ class Worldmap {
                         }
 
                         let items_on_screen = layers[layer]
-                        console.log(items_on_screen)
+                        // console.log(items_on_screen)
                         for (let item in items_on_screen) {
                             let it = items_on_screen[item]
-                            console.log(it)
+                            // console.log(it)
 
                             let found = false
                             // Update item pos if item already registered in items list
 
-                            console.log(items)
+                            // console.log(items)
                             if (it.id in items){
-                                console.log("Updating item")
+                                // console.log("Updating item")
                                 items[it.id].pos.x = real_pos.x
                                 items[it.id].pos.y = real_pos.y
                                 found = true
                                 break
                             }
+
 
                             // Append item to the items list if not added yet
                             if (!found){
@@ -268,6 +269,8 @@ class Worldmap {
                                 items[it.id] = new_item
                                 new_item.draw_relative_to(main_player)
                             }
+
+
                         }
                         break
 

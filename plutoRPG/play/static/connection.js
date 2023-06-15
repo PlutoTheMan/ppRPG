@@ -23,9 +23,12 @@ function get_handlers(socket) {
         } else if (data.type == 'view'){
             worldmap.draw_ground_and_player(JSON.parse(data['view']))
             worldmap.draw_ground_layer(JSON.parse(data['view']), 1)
-            console.log(JSON.parse(data['view']))
+            // console.log(JSON.parse(data['view']))
         } else if (data.type == 'view_player_movement'){
+            console.log("from_movement")
             worldmap.draw_from_view_player_movement(JSON.parse(data['view']))
+        } else if (data.type == "item_drag"){
+            console.log("Item Drag...")
         }
     }
 

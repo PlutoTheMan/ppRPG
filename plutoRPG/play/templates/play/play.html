@@ -74,38 +74,38 @@
                         </div>
 
 
-                        <div class="bag">
+                        <div class="bag non_selectable">
                             <p class="m-4 mx-5 bg-slate-500 ">Player Bag</p>
                             <div data-id="0" class="bag_0">
-                                <img src="{% static 'sprites/weapons.png' %}" draggable=true>
+                                <img class="non_selectable" src="{% static 'sprites/weapons.png' %}">
                             </div>
 
                             <div data-id="1" class="bag_1">
-                                <img draggable=true>
+                                <img class="non_selectable">
                             </div>
 
                             <div data-id="2" class="bag_2">
-                                <img draggable=true>
+                                <img class="non_selectable">
                             </div>
 
                             <div data-id="3" class="bag_3">
-                                <img draggable=true>
+                                <img class="non_selectable">
                             </div>
 
                             <div data-id="4" class="bag_4">
-                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                                <img class="non_selectable" src="{% static 'sprites/weapons.png' %}">
                             </div>
 
                             <div data-id="5" class="bag_5">
-                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                                <img class="non_selectable" src="{% static 'sprites/weapons.png' %}">
                             </div>
 
                             <div data-id="6" class="bag_6">
-                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                                <img class="non_selectable" src="{% static 'sprites/weapons.png' %}">
                             </div>
 
                             <div data-id="7" class="bag_7">
-                                <img src="{% static 'sprites/weapons.png' %}" class="w-100 h-100" draggable=true>
+                                <img class="non_selectable" src="{% static 'sprites/weapons.png' %}">
                             </div>
                         </div>
                     </div>
@@ -148,6 +148,8 @@
 <script src="{% static 'classes/player.js' %}"></script>
 <script src="{% static 'classes/item.js' %}"></script>
 <script src="{% static 'classes/chat.js' %}"></script>
+<script src="{% static 'classes/mouse.js' %}"></script>
+<script src="{% static 'classes/ground.js' %}"></script>
 <script src="{% static 'connection.js' %}"></script>
 <script src="{% static 'game.js' %}"></script>
 {% endblock %}

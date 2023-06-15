@@ -58,6 +58,7 @@ class WorldMap:
             print(e)
             return False
 
+        # await character.consumer.send_items_view_to_players(pos_to)
         await character.consumer.send_view_to_players(pos_to)
 
     async def move_item_from_equipment_to_ground(self, character, data):

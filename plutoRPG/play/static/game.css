@@ -92,6 +92,17 @@
     user-select: none;
 }
 
+.non_selectable {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -o-user-select: none;
+}
 
 #canvas_ground{
     z-index: 95;
@@ -139,6 +150,13 @@
     font-size: 0;
     left: -64px;
     top: -64px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 .content {
@@ -232,9 +250,21 @@
     border-left: 1px solid black;
 }
 
-#game_grid div:hover{
+/*#game_grid div:hover{*/
+/*    border: 2px solid greenyellow;*/
+/*    background-color: rgba(173, 255, 47, 0.5);*/
+/*    cursor: pointer;*/
+/*}*/
+
+.ground_highlight{
     border: 2px solid greenyellow;
     background-color: rgba(173, 255, 47, 0.5);
+    cursor: pointer;
+}
+
+.ground_highlight_drag{
+    border: 2px solid #ff4920;
+    background-color: rgba(255, 72, 46, 0.50);
     cursor: pointer;
 }
 

@@ -49,7 +49,19 @@ class Screen{
         if (id === undefined)
             return
 
-        let draw_pos = this.getSquareCords(tile_pos.x, tile_pos.y)
+        let draw_pos = null
+        if (main_player.moving_bottom){
+            draw_pos = this.getSquareCords(tile_pos.x, tile_pos.y + 1)
+        } else if (main_player.moving_top) {
+            draw_pos = this.getSquareCords(tile_pos.x, tile_pos.y - 1)
+        } else if (main_player.moving_left) {
+            draw_pos = this.getSquareCords(tile_pos.x - 1, tile_pos.y)
+        } else if (main_player.moving_right) {
+            draw_pos = this.getSquareCords(tile_pos.x + 1, tile_pos.y)
+        } else {
+            draw_pos = this.getSquareCords(tile_pos.x, tile_pos.y)
+        }
+
         let img = get_sprite_info(id)
         // console.log(img)
         ctx_ground.imageSmoothingEnabled= false

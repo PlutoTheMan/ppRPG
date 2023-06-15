@@ -250,107 +250,6 @@ class MainPlayer extends Player {
         this.action_send_last_send = Date.now() - this.action_send_delay
     }
 
-    // drag_drop_to_ground(pos_from, pos_to){
-    //     let context = this
-    //     console.log(`Dropped from ${context.inventory.drag_source_type} [${pos_from.x}, ${pos_from.y}]
-    //      to ${this.inventory.drag_destination_type} [${pos_to.x}, ${pos_to.y}]`)
-    // }
-
-    drag_drop(source_type, destination_type){
-
-        let from_ground_pos = null
-        let from_inventory_slot = null
-        let to_ground_pos = null
-        let to_inventory_slot = null
-
-        if (source_type == "ground"){
-            from_ground_pos = dragged_from
-            console.log(`from ${source_type}, pos: ${dragged_from.x}, ${dragged_from.y}`)
-        } else if (source_type == "inventory") {
-            from_inventory_slot = main_player.inventory.dragged_source
-            console.log(`from ${source_type} inventory_id: ${from_inventory_slot}`)
-        }
-
-        if (destination_type == "ground") {
-            to_ground_pos = dragged_to
-            console.log(`to ${destination_type}, pos: ${dragged_to.x}, ${dragged_to.y}`)
-        } else if (destination_type == "inventory") {
-            to_inventory_slot = main_player.inventory.drag_destination
-            console.log(`to ${destination_type} inventory_id: ${to_inventory_slot}`)
-        }
-
-        let send_type_from = from_ground_pos != null ? "ground" : "inventory"
-        let send_type_to = to_ground_pos != null ? "ground" : "inventory"
-        let send_from = from_ground_pos != null ? from_ground_pos : from_inventory_slot
-        let send_to = to_ground_pos != null ? to_ground_pos : to_inventory_slot
-        let data = {
-            "source_type": send_type_from,
-            "source_value": send_from,
-            "target_type": send_type_to,
-            "target_value": send_to
-        }
-
-        // console.log(data)
-        if (Date.now() - this.move_send_delay > this.move_send_last_send){
-            console.log("sending drag action")
-            // console.log(data['target_value'])
-            gameSocket.send(JSON.stringify({
-                'drag': data
-            }))
-            this.move_send_last_send = Date.now()
-        }
-
-        // let context = this
-        // console.log(`Dropped from ${context.inventory.drag_source_type} [${pos_from.x}, ${pos_from.y}]
-        //  to ${this.inventory.drag_destination_type} [${pos_to.x}, ${pos_to.y}]`)
-    }
-    update(){
-        if (this.moving){
-            this.draw()
-            worldmap.draw_all_items()
-        }
-
-        if (this.pressing_move_top){
-            this._move(0)
-        }
-        if (this.pressing_move_right){
-            this._move(1)
-        }
-        if (this.pressing_move_bottom){
-            this._move(2)
-        }
-        if (this.pressing_move_left){
-            this._move(3)
-        }
-    }
-
-    draw(){
-        ctx_players.imageSmoothingEnabled= false
-
-        if (this.direction==1){
-            ctx_players.drawImage(spr_player, Math.floor(this.animation_step)%8*64, 64*8+3*64, 64, 64, this.drawPos.x1, this.drawPos.y1, square_width+1, square_height);
-        } else if (this.direction==3){
-            ctx_players.drawImage(spr_player, Math.floor(this.animation_step)%8*64, 64*8+1*64, 64, 64, this.drawPos.x1, this.drawPos.y1, square_width+1, square_height);
-        } else {
-            ctx_players.drawImage(spr_player, Math.floor(this.animation_step)%8*64, 64*8+this.direction*64, 64, 64, this.drawPos.x1, this.drawPos.y1, square_width+1, square_height);
-        }
-
-        if (this.draw_nickname){
-            ctx_players.fillStyle = 'rgba(255,255,255,0.79)';
-            ctx_players.fillRect(this.drawPos.x1+1-square_width/4, this.drawPos.y1-15, square_width*1.5, 15)
-            ctx_players.textAlign = "center";
-            ctx_players.font = "bold 14px serif";
-            ctx_players.fillStyle = '#000000';
-            ctx_players.fillText(this.name, this.drawPos.x1 + 32, this.drawPos.y1 - 2);
-        }
-
-        if (this.draw_position){
-            ctx_players.fillStyle = 'rgba(255,255,255,0.79)';
-            ctx_players.fillRect(this.drawPos.x1+1-square_width/4, this.drawPos.y1 + square_height + 3, square_width*1.5, 15)
-            ctx_players.fillStyle = '#000000';
-            ctx_players.fillText(`x: ${this.pos.x}, y: ${this.pos.y}` , this.drawPos.x1 + 32, this.drawPos.y1 + square_height + 15);
-        }
-    }
     init_listener(){
         let context = this
         this.listener = window.addEventListener("keydown", function(e){
@@ -403,7 +302,25 @@ class MainPlayer extends Player {
             }
         })
     }
+    update(){
+        if (this.moving){
+            this.draw()
+            worldmap.draw_all_items()
+        }
 
+        if (this.pressing_move_top){
+            this._move(0)
+        }
+        if (this.pressing_move_right){
+            this._move(1)
+        }
+        if (this.pressing_move_bottom){
+            this._move(2)
+        }
+        if (this.pressing_move_left){
+            this._move(3)
+        }
+    }
     _move(direction){
         if (!this.moving){
             // Prevent unnecessary too quick request to server
@@ -441,7 +358,7 @@ class MainPlayer extends Player {
             case 3:
                 player_to_move.moving_left = true
                 break
-            }
+        }
 
         worldmap.update_items_from_view(JSON.parse(view))
         worldmap.update_all_items()
@@ -509,6 +426,79 @@ class MainPlayer extends Player {
             worldmap.draw_ground_layer(JSON.parse(view), 0)
             worldmap.draw_ground_layer(JSON.parse(view), 1)
         }, timeout_speed/(this.speed/context.speed_reducer))
+    }
+    drag_drop(source_type, destination_type){
 
+        let from_ground_pos = null
+        let from_inventory_slot = null
+        let to_ground_pos = null
+        let to_inventory_slot = null
+
+        if (source_type == "ground"){
+            from_ground_pos = ground.dragged_from
+            // console.log(`from ${source_type}, pos: ${from_ground_pos.x}, ${from_ground_pos.y}`)
+        } else if (source_type == "inventory") {
+            from_inventory_slot = main_player.inventory.dragged_from
+            // console.log(`from ${source_type} inventory_id: ${from_inventory_slot}`)
+        }
+
+        if (destination_type == "ground") {
+            to_ground_pos = ground.dragged_to
+            // console.log(`to ${destination_type}, pos: ${to_ground_pos.x}, ${to_ground_pos.y}`)
+        } else if (destination_type == "inventory") {
+            to_inventory_slot = main_player.inventory.drag_destination
+            // console.log(`to ${destination_type} inventory_id: ${to_inventory_slot}`)
+        }
+
+        let send_type_from = from_ground_pos != null ? "ground" : "inventory"
+        let send_type_to = to_ground_pos != null ? "ground" : "inventory"
+        let send_from = from_ground_pos != null ? from_ground_pos : from_inventory_slot
+        let send_to = to_ground_pos != null ? to_ground_pos : to_inventory_slot
+        let data = {
+            "source_type": send_type_from,
+            "source_value": send_from,
+            "target_type": send_type_to,
+            "target_value": send_to
+        }
+
+        if (Date.now() - this.move_send_delay > this.move_send_last_send){
+            // console.log("sending drag action")
+            gameSocket.send(JSON.stringify({
+                'drag': data
+            }))
+            this.move_send_last_send = Date.now()
+        }
+
+        let context = this
+        // console.log(`Dragged from [${from_ground_pos.x}, ${from_ground_pos.y}]
+        //  to [${to_ground_pos.x}, ${to_ground_pos.y}]`)
+    }
+
+    draw(){
+        ctx_players.imageSmoothingEnabled= false
+
+        if (this.direction==1){
+            ctx_players.drawImage(spr_player, Math.floor(this.animation_step)%8*64, 64*8+3*64, 64, 64, this.drawPos.x1, this.drawPos.y1, square_width+1, square_height);
+        } else if (this.direction==3){
+            ctx_players.drawImage(spr_player, Math.floor(this.animation_step)%8*64, 64*8+1*64, 64, 64, this.drawPos.x1, this.drawPos.y1, square_width+1, square_height);
+        } else {
+            ctx_players.drawImage(spr_player, Math.floor(this.animation_step)%8*64, 64*8+this.direction*64, 64, 64, this.drawPos.x1, this.drawPos.y1, square_width+1, square_height);
+        }
+
+        if (this.draw_nickname){
+            ctx_players.fillStyle = 'rgba(255,255,255,0.79)';
+            ctx_players.fillRect(this.drawPos.x1+1-square_width/4, this.drawPos.y1-15, square_width*1.5, 15)
+            ctx_players.textAlign = "center";
+            ctx_players.font = "bold 14px serif";
+            ctx_players.fillStyle = '#000000';
+            ctx_players.fillText(this.name, this.drawPos.x1 + 32, this.drawPos.y1 - 2);
+        }
+
+        if (this.draw_position){
+            ctx_players.fillStyle = 'rgba(255,255,255,0.79)';
+            ctx_players.fillRect(this.drawPos.x1+1-square_width/4, this.drawPos.y1 + square_height + 3, square_width*1.5, 15)
+            ctx_players.fillStyle = '#000000';
+            ctx_players.fillText(`x: ${this.pos.x}, y: ${this.pos.y}` , this.drawPos.x1 + 32, this.drawPos.y1 + square_height + 15);
+        }
     }
 }
