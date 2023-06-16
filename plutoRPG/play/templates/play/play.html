@@ -30,6 +30,18 @@
 
                 </canvas>
 
+                <div id="game_bar" class="hidden flex px-4">
+                    <ul class="my-auto">
+                        <li id="game_bar_settings" class="pr-2"><button class="btn bg-blue-500 p-1">SETTINGS</button></li>
+                        <li class="px-2"><button class="bg-blue-500 p-1">EMPTY BUTTON</button></li>
+                        <li class="pl-2"><button class="bg-blue-500 p-1">EMPTY BUTTON</button></li>
+                    </ul>
+                </div>
+
+                <div class="hidden" id="game_options">
+
+                    </div>
+
                 <div class="content_wrap ">
                     <canvas id="canvas_ground">
 
@@ -109,6 +121,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div id="chat_box" class="bg-slate-900/80 hidden py-2">
@@ -141,6 +154,7 @@
 {% endblock %}
 
 {% block 'scripts' %}
+<script src="{% static 'classes/canvas.js' %}"></script>
 <script src="{% static 'classes/sprites.js' %}"></script>
 <script src="{% static 'classes/screen.js' %}"></script>
 <script src="{% static 'classes/worldmap.js' %}"></script>
@@ -150,6 +164,7 @@
 <script src="{% static 'classes/chat.js' %}"></script>
 <script src="{% static 'classes/mouse.js' %}"></script>
 <script src="{% static 'classes/ground.js' %}"></script>
+<script src="{% static 'classes/settings.js' %}"></script>
 <script src="{% static 'connection.js' %}"></script>
 <script src="{% static 'game.js' %}"></script>
 {% endblock %}

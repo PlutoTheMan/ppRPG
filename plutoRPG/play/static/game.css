@@ -35,6 +35,24 @@
     transition: 0.15s;
 }
 
+#game_options{
+
+    background-color: rgba(16, 13, 13);
+    transition: 0.15s;
+
+    border: 2px solid red;
+    font-size: 15px;
+    position: absolute;
+    top: 64px;
+    left: 0px;
+    right: 0;
+    margin: 0 auto;
+    z-index: 111;
+    background-color: rgba(16, 13, 13, 0.92);
+    transition: 0.15s;
+}
+
+
 .equipment div {
     display: inline-block;
     padding: 3px;
@@ -136,6 +154,28 @@
     font-size: 0;
     padding: 0;
     /*margin: 0;*/
+}
+
+#game_bar{
+    font-size: 15px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0;
+    margin: 0 auto;
+    z-index: 111;
+    background-color: rgba(16, 13, 13);
+    transition: 0.15s;
+}
+
+#game_bar ul li {
+    display: inline-block;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+#game_bar ul li button{
+    outline: none;
 }
 
 #game_grid {
