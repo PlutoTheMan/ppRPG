@@ -188,13 +188,43 @@
                         <h3 class="bg-orange-800 border-slate-900 border text-neutral-200 font-bold">Top 5 Players</h3>
                     </header>
 
-                    <ul class="text-left">
-                        <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-amber-500"></i><a class="nickname font-semibold text-blue-700" href="#">Pawel</a>, lvl 21, Warrior</li>
-                        <li class="bg-slate-700 px-2"><i class="fa-solid fa-trophy mr-1 text-stone-400"></i><a class="nickname font-semibold text-blue-700" href="#">Romuland</a> lvl 13, Archer</li>
-                        <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-orange-950"></i><a class="nickname font-semibold text-blue-700" href="#">Pluto</a>, lvl 2, Kittymancer</li>
-                        <li class="bg-slate-700 px-2"><a class="nickname font-semibold text-blue-700" href="#">Geralt</a>, lvl 1, Archer</li>
-                        <li class="bg-slate-500 px-2"><a class="nickname font-semibold text-blue-700" href="#">Hodin Rood</a>, lvl 1, Archer</li>
-                    </ul>
+                    {% block 'top_5_players' %}
+                        {% if top_5_players %}
+                        <ul>
+                        {% for player in top_5_players %}
+                            {% if forloop.counter|divisibleby:2 %}
+                            <li class="bg-slate-500 px-2"><i class="fa-solid fa-trophy mr-1 text-amber-500"></i>
+                                <a class="nickname font-semibold text-blue-700" href="/characters/{{player.name}}">{{player.name}}</a> lvl
+                                {{player.level}}, {{player.get_vocation_display}}
+                            </li>
+                            {% elif forloop.counter|divisibleby:3 %}
+                                <li class="bg-slate-700 px-2"><i class="fa-solid fa-trophy mr-1 text-stone-400"></i>
+                                    <a class="nickname font-semibold text-blue-700" href="/characters/{{player.name}}">{{player.name}}</a> lvl
+                                    {{player.level}}, {{player.get_vocation_display}}</li>
+                            {% elif forloop.counter|divisibleby:4 %}
+                                <li class="bg-slate-500 px-2">
+                                    <a class="nickname font-semibold text-blue-700" href="/characters/{{player.name}}">{{player.name}}</a> lvl
+                                    {{player.level}}, {{player.get_vocation_display}}
+                                </li>
+                            {% elif forloop.counter|divisibleby:5 %}
+                                <li class="bg-slate-700 px-2">
+                                    <a class="nickname font-semibold text-blue-700" href="/characters/{{player.name}}">{{player.name}}</a> lvl
+                                    {{player.level}}, {{player.get_vocation_display}}</li>
+                            {% else %}
+                            <li class="bg-slate-700 px-2"><i class="fa-solid fa-trophy mr-1 text-amber-500"></i>
+                                <a class="nickname font-semibold text-blue-700" href="/characters/{{player.name}}">{{player.name}}</a> lvl
+                                {{player.level}}, {{player.get_vocation_display}}
+                            </li>
+                            {% endif %}
+
+                        {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>No characters available.</p>
+                        {% endif %}
+                    {% endblock %}
+
+
                 </section>
 
                 <section class="p-5">
