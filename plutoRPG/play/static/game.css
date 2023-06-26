@@ -124,36 +124,31 @@
 
 #canvas_ground{
     z-index: 95;
-    border: 2px solid blue;
-    left: -64px;
-    top: -64px;
+    display: none;
 }
 
 #canvas_items{
-    border: 2px solid saddlebrown;
     z-index: 96;
-    left: -64px;
-    top: -64px;
+    display: none;
 }
 
 #canvas_players{
     z-index: 100;
-    left: -64px;
-    top: -64px;
+    display: none;
 }
 
 
 .content_wrap{
-    /*border: 3px solid red;*/
+    /*border: 2px solid red;*/
+    top: 0px;
+    /*height: 704px;*/
     position: absolute;
-    top: 64px;
     left: 0;
     right: 0;
-    margin: 0 auto;
+    margin: auto auto;
     overflow: hidden;
     font-size: 0;
     padding: 0;
-    /*margin: 0;*/
 }
 
 #game_bar{
@@ -168,6 +163,17 @@
     transition: 0.15s;
 }
 
+#game_bar_left{
+    font-size: 15px;
+    position: absolute;
+    left: 0px;
+    right: 0;
+    /*margin: 0 auto;*/
+    z-index: 111;
+    background-color: rgb(31, 26, 26);
+    transition: 0.15s;
+}
+
 #game_bar ul li {
     display: inline-block;
     color: whitesmoke;
@@ -179,17 +185,15 @@
 }
 
 #game_grid {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     margin: 0 auto;
-    width: 100%;
     z-index: 102;
     padding: 0;
     font-size: 0;
-    left: -64px;
-    top: -64px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -354,4 +358,14 @@
     bottom: 0px;
 }
 
+.options_square_size_not_selected{
+    background-color: #565555;
+    padding: 6px;
+    border: 1px solid black;
+}
 
+.options_square_size_selected{
+    background-color: #45cb12;
+    border: 2px solid #1140d7;
+    padding: 6px;
+}

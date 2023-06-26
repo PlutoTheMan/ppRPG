@@ -123,14 +123,27 @@ class WorldMap:
                     }
                 }
                 if 'tiles' in tile_data:
-                    if tile_data['tiles'][0]['id'] == tile_id-1:
+                    if tile_id == tile_set['firstgid'] - tile_data['tiles'][0]['id']:
                         self.tiles_dict[tile_id]['properties'] = {}
                         properties = tile_data['tiles'][0]['properties']
                         for prop in properties:
                             self.tiles_dict[tile_id]['properties'][prop['name']] = prop['value']
 
-            tile_set_data.close()
+                    # print(tile_id == tile_set['firstgid'] - tile_data['tiles'][0]['id'])
+                    # print(tile_data)
+                    # print(tile_set['firstgid'] - tile_data['tiles'][0]['id'])
+                    # print("__")
+                    # break
+                    # print(tile_data)
+                # if 'tiles' in tile_data:
+                #     if tile_data['tiles'][0]['id'] == tile_id-1:
+                #         self.tiles_dict[tile_id]['properties'] = {}
+                #         properties = tile_data['tiles'][0]['properties']
+                #         for prop in properties:
+                #             self.tiles_dict[tile_id]['properties'][prop['name']] = prop['value']
 
+            tile_set_data.close()
+        print(self.tiles_dict[17])
     def get_layers_data(self):
         """
         Made for easier readability
@@ -204,7 +217,6 @@ class WorldMap:
 
                     if not self.vision_map[t]:
                         del self.vision_map[t]
-
 
     def update_vision_map(self, character, direction=5):
         """

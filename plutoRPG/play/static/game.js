@@ -9,6 +9,7 @@ let game_chat = null
 let ground = null
 let mouse = null
 let game_settings = null
+let game_bar = null
 
 async function get_characters() {
     const response = await fetch("get_characters");
@@ -27,7 +28,7 @@ async function select_character(name){
 
 get_map_tile_sets().then((response)=>response.json()).then((data)=>{
     sprite_list = data
-    // console.log(data)
+    // console.log(sprite_list)
 })
 get_characters().then((response)=>response.json()).then((data)=>{
     data.forEach(character=>{
@@ -53,6 +54,7 @@ function load_game(content){
     html_characters_list.remove()
     // drawMapMesh()
     worldmap = new Worldmap()
+    game_bar = new GameBar()
     screen = new Screen()
     player_inventory = new Inventory(content.bag)
 
@@ -67,11 +69,14 @@ function load_game(content){
     ground = new Ground()
     mouse = new Mouse()
     game_settings = new Settings()
-    game_bar.classList.remove("hidden")
+
+    ground.fps_start
     window.requestAnimationFrame(animate)
 }
 function animate() {
     main_player.update()
+    ground.calculate_fps()
+    ground.update_animations()
     window.requestAnimationFrame(animate);
 }
 

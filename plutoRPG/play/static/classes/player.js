@@ -15,7 +15,8 @@ class Player {
         this.draw_nickname = true
         this.draw_position = true
         this.direction = data.player_info.direction
-        this.speed = 130
+        // this.speed = 130
+        this.speed = 250
         this.speed_reducer = 100 //reduce speed by this amount, letting this.speed to be greater values
         this.offset_bg = 0
         this.interval_background_move = null
@@ -36,6 +37,9 @@ class Player {
         this.interval_move = null
     }
 
+    update_draw_pos(){
+        this.drawPos = screen.getSquareCords(5, 5)
+    }
     move(direction){
         // This function fires only after server accepts move
         if (this.interval_move != null)
@@ -90,7 +94,7 @@ class Player {
             // !Square width or height doesn't matter as long as they are the same value
             context.offset_bg += square_width*game_view_multiplier/times_repeated*(context.speed/context.speed_reducer)/2
             context.animation_step += 0.15
-        }, background_interval)
+        }, background_interval * game_view_multiplier/2)
         setTimeout(function(){
             clearInterval(context.interval_move)
             context.interval_move = null
@@ -194,7 +198,7 @@ class Player {
             ctx_players.fillText(
                 this.name,
                 draw_pos.x1 + rel_player.offset_bg * rel_player.x_modifier1 + rel_player.x_modifier2
-                - moving_modifier*(this.offset_bg * this.x_modifier1) - moving_modifier*(this.x_modifier2) + 32,
+                - moving_modifier*(this.offset_bg * this.x_modifier1) - moving_modifier*(this.x_modifier2) + square_size_base,
                 draw_pos.y1 + rel_player.offset_bg * rel_player.y_modifier1 + rel_player.y_modifier2
                  - moving_modifier*(this.offset_bg * this.y_modifier1) - moving_modifier*(this.y_modifier2) - 2);
 
@@ -213,7 +217,7 @@ class Player {
             ctx_players.fillText(
                 `x: ${this.pos.x}, y: ${this.pos.y}`,
                 draw_pos.x1 + rel_player.offset_bg * rel_player.x_modifier1 + rel_player.x_modifier2
-                - moving_modifier*(this.offset_bg * this.x_modifier1) - moving_modifier*(this.x_modifier2) + 32,
+                - moving_modifier*(this.offset_bg * this.x_modifier1) - moving_modifier*(this.x_modifier2) + square_size_base,
                 draw_pos.y1 + rel_player.offset_bg * rel_player.y_modifier1 + rel_player.y_modifier2
                  - moving_modifier*(this.offset_bg * this.y_modifier1) - moving_modifier*(this.y_modifier2) + square_height + 15
             )
@@ -233,6 +237,7 @@ class MainPlayer extends Player {
         super(data);
         this.listener = null
         this.init_listener()
+        this.moving_left = false
         this.moving_right = false
         this.moving_top = false
         this.moving_bottom = false
@@ -293,12 +298,16 @@ class MainPlayer extends Player {
             switch (e.key) {
                 case "w":
                     context.pressing_move_top = false
+                    break
                 case "d":
                     context.pressing_move_right = false
+                    break
                 case "s":
                     context.pressing_move_bottom = false
+                    break
                 case "a":
                     context.pressing_move_left = false
+                    break
             }
         })
     }
@@ -325,7 +334,6 @@ class MainPlayer extends Player {
         if (!this.moving){
             // Prevent unnecessary too quick request to server
             if (Date.now() - this.move_send_delay > this.move_send_last_send){
-                // console.log("sending move")
                 gameSocket.send(JSON.stringify({
                     'move': direction
                 }))
@@ -388,35 +396,35 @@ class MainPlayer extends Player {
             context.animation_step += 0.15
             if (context.direction == 3){
                 context.offset_bg += square_width*game_view_multiplier/times_repeated*(context.speed/context.speed_reducer)/2
-                canvas_ground.style.left = Math.round(context.offset_bg) -64 + 'px'
-                game_grid.style.left = Math.round(context.offset_bg) -64 + 'px'
+                canvas_ground.style.left = Math.round(context.offset_bg) -square_width + 'px'
+                game_grid.style.left = Math.round(context.offset_bg) -square_width + 'px'
             } else if (context.direction == 1){
                 context.offset_bg += square_width*game_view_multiplier/times_repeated*(context.speed/context.speed_reducer)/2
-                canvas_ground.style.left = -Math.round(context.offset_bg) -64 + 'px'
-                game_grid.style.left = -Math.round(context.offset_bg) -64 + 'px'
+                canvas_ground.style.left = -Math.round(context.offset_bg) -square_width + 'px'
+                game_grid.style.left = -Math.round(context.offset_bg) -square_width + 'px'
             } else if (context.direction == 0){
                 context.offset_bg += square_width*game_view_multiplier/times_repeated*(context.speed/context.speed_reducer)/2
-                canvas_ground.style.top = Math.round(context.offset_bg) -64 + 'px'
-                game_grid.style.top = Math.round(context.offset_bg) -64 + 'px'
+                canvas_ground.style.top = Math.round(context.offset_bg) -square_height + 'px'
+                game_grid.style.top = Math.round(context.offset_bg) -square_height + 'px'
             } else if (context.direction == 2){
                 context.offset_bg += square_height*game_view_multiplier/times_repeated*(context.speed/context.speed_reducer)/2
-                canvas_ground.style.top = -Math.round(context.offset_bg) -64 + 'px'
-                game_grid.style.top = -Math.round(context.offset_bg) -64 + 'px'
+                canvas_ground.style.top = -Math.round(context.offset_bg) -square_height + 'px'
+                game_grid.style.top = -Math.round(context.offset_bg) -square_height + 'px'
             }
             // Also draw other players!
             ctx_players.clearRect(0, 0, canvas_players.width, canvas_players.height);
             worldmap.draw_all_players()
-        }, background_interval)
+        }, background_interval * game_view_multiplier/2)
         setTimeout(function(){
             clearInterval(context.interval_background_move)
             context.interval_background_move = null
             context.moving = false
 
             context.offset_bg = 0
-            canvas_ground.style.left = -64 + 'px'
-            canvas_ground.style.top = -64 + 'px'
-            game_grid.style.left = -64 + 'px'
-            game_grid.style.top = -64 + 'px'
+            canvas_ground.style.left = -square_width + 'px'
+            canvas_ground.style.top = -square_height + 'px'
+            game_grid.style.left = -square_width + 'px'
+            game_grid.style.top = -square_height + 'px'
             context.animation_step = 0
             context.moving_right = false
             context.moving_left = false
@@ -491,14 +499,14 @@ class MainPlayer extends Player {
             ctx_players.textAlign = "center";
             ctx_players.font = "bold 14px serif";
             ctx_players.fillStyle = '#000000';
-            ctx_players.fillText(this.name, this.drawPos.x1 + 32, this.drawPos.y1 - 2);
+            ctx_players.fillText(this.name, this.drawPos.x1 + square_size_base, this.drawPos.y1 - 2);
         }
 
         if (this.draw_position){
             ctx_players.fillStyle = 'rgba(255,255,255,0.79)';
             ctx_players.fillRect(this.drawPos.x1+1-square_width/4, this.drawPos.y1 + square_height + 3, square_width*1.5, 15)
             ctx_players.fillStyle = '#000000';
-            ctx_players.fillText(`x: ${this.pos.x}, y: ${this.pos.y}` , this.drawPos.x1 + 32, this.drawPos.y1 + square_height + 15);
+            ctx_players.fillText(`x: ${this.pos.x}, y: ${this.pos.y}` , this.drawPos.x1 + square_size_base, this.drawPos.y1 + square_height + 15);
         }
     }
 }

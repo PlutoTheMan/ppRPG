@@ -21,7 +21,7 @@
 {% block 'aside-left' %}{% endblock %}
 {% block 'main' %}
 
-    <div class="col-start-1 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
+    <div id="mid_holder" class="col-start-1 col-end-13 bg-slate-600 border-slate-400 rounded-sm border">
         <section class="p-5">
 
             <div class="content">
@@ -38,24 +38,63 @@
                     </ul>
                 </div>
 
-                <div class="hidden" id="game_options">
+                <div id="game_bar_left" class="hidden py-4 px-3">
+                    <ul class="text-center">
+                        <li id="game_bar_left_equipment" class="bg-blue-500">
+                            <button class="p-2 btn w-full">I</button>
+                        </li>
+
+                        <li class="my-5 bg-blue-500">
+                            <button class="p-2 w-full">E</button>
+                        </li>
+
+                        <li class="bg-blue-500">
+                            <button class="p-2 w-full">E</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="hidden flex p-5" id="game_options">
+                    <div class="flex-auto">
+                        <div class="h-1/2 bg-slate-400/50">
+                            <p class="bg-slate-300/50">Display</p>
+                            <ul id="game_options_display" class="text-left p-3">
+                                <li class="mb-2">
+                                    <span>Draw map mesh</span>
+                                    <input type="checkbox" id="draw_map_mesh" name="draw_map_mesh">
+                                </li>
+                                <li class="mb-2">
+                                    <span>Draw ground info</span>
+                                    <input type="checkbox" id="draw_ground_info" name="draw_ground_info">
+                                </li>
+                                <li>
+                                    <span class="p-2 bg-orange-400">Square Size</span>
+                                    <button class="options_square_size_not_selected">32</button>
+                                    <button class="options_square_size_not_selected">64</button>
+                                    <button class="options_square_size_not_selected">96</button>
+                                    <button class="options_square_size_not_selected">128</button>
+                                    <button class="options_square_size_not_selected">160</button>
+                                </li>
+                            </ul>
+                        </div>
 
                     </div>
+                </div>
 
                 <div class="content_wrap ">
-                    <canvas id="canvas_ground">
+                    <canvas class="hidden" id="canvas_ground">
 
                     </canvas>
 
-                    <canvas id="canvas_items">
+                    <canvas class="hidden" id="canvas_items">
 
                     </canvas>
 
-                    <div class="p-0 m-0" id="game_grid">
+                    <div class="p-0 m-0 hidden" id="game_grid">
 
                     </div>
 
-                    <canvas id="canvas_players">
+                    <canvas class="hidden" id="canvas_players">
 
                     </canvas>
 
@@ -156,6 +195,7 @@
 {% block 'scripts' %}
 <script src="{% static 'classes/canvas.js' %}"></script>
 <script src="{% static 'classes/sprites.js' %}"></script>
+<script src="{% static 'classes/game_bar.js' %}"></script>
 <script src="{% static 'classes/screen.js' %}"></script>
 <script src="{% static 'classes/worldmap.js' %}"></script>
 <script src="{% static 'classes/inventory.js' %}"></script>
@@ -165,6 +205,7 @@
 <script src="{% static 'classes/mouse.js' %}"></script>
 <script src="{% static 'classes/ground.js' %}"></script>
 <script src="{% static 'classes/settings.js' %}"></script>
+
 <script src="{% static 'connection.js' %}"></script>
 <script src="{% static 'game.js' %}"></script>
 {% endblock %}

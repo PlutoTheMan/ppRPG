@@ -83,17 +83,15 @@ class Inventory {
     }
 
     put_blank_image(element){
-        console.log(element)
         element.setAttribute("src", "/static/sprites/ghost_image.png")
-        element.style.width = 64 + "px"
-        element.style.left = 32 + "px"
-        element.style.top = 32 + "px"
+        element.style.width = square_width + "px"
+        element.style.left = square_size_base + "px"
+        element.style.top = square_size_base + "px"
     }
     update(){
-        console.log("UPDATING")
         for (let bag_slot in this.bag) {
             let g_id = this.bag[bag_slot]['game_id']
-            console.log(g_id)
+            // console.log(g_id)
             let bag_class = ".bag_" + (g_id - 1).toString()
 
             let img = document.querySelector(bag_class).children[0]

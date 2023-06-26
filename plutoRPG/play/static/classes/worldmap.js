@@ -176,8 +176,18 @@ class Worldmap {
         ctx_ground.clearRect(0, 0, canvas_ground.width, canvas_ground.height);
 
         for (let k in data){
+            let id = data[k][0]['ground_sprite']
+            let sprite_set = sprite_list['tile_set']
+
             let pos = k.split(",")
             let real_pos = {'x': Number(pos[0]), y:Number(pos[1])}
+
+            if ('properties' in sprite_set[id]){
+                if ('animate_first' in sprite_set[id]['properties'])
+                    ground.tiles_to_animate[k] = id
+            }
+
+
             let layers = data[k]
             let tile_pos
 
@@ -290,16 +300,38 @@ class Worldmap {
     draw_ground_layer(data, layer_number){
         for (let k in data){
             let pos = k.split(",")
+
             let real_pos = {'x': Number(pos[0]), y:Number(pos[1])}
             let layers = data[k]
             let tile_pos
 
+            let sprite_set = sprite_list['tile_set']
+
+
+
             for (let layer in layers){
                 switch (layer){
                     case layer_number.toString():
+                        if (layer_number == 1){
+                            real_pos.y -= 1
+                        }
                         tile_pos = this.screen.pos_to_tile_cord(real_pos)
-                        let id = layers[layer]["ground_sprite"]
-                        this.screen.draw_to_tile(tile_pos, id, main_player)
+                        if (tile_pos){
+                            let id = layers[layer]["ground_sprite"]
+                            let drawn = false
+                            if ('properties' in sprite_set[id]){
+                                if ('animate_first' in sprite_set[id]['properties'])
+                                    if (!(k in ground.tiles_to_animate)){
+                                        ground.tiles_to_animate[k] = id
+                                    }
+                                    let piece = ground.animation_step % (get_sprite_info(id)['animate_length'])
+                                    this.screen.draw_to_tile(tile_pos, id + piece, main_player)
+                                    drawn = true
+                            }
+                            if (!drawn){
+                                this.screen.draw_to_tile(tile_pos, id, main_player)
+                            }
+                        }
                         break
                 }
             }

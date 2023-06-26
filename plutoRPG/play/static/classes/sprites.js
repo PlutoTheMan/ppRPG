@@ -10,10 +10,10 @@ const spr_ground_2 = new Image()
 spr_ground_2.src = "/static/sprites/2.png"
 
 const spr_ground_3 = new Image()
-spr_ground_3.src = "/static/sprites/water.gif"
+spr_ground_3.src = "/static/sprites/shallow_water.png"
 
 const spr_movement_block = new Image()
-spr_ground_3.src = "/static/sprites/movement_block.png"
+spr_movement_block.src = "/static/sprites/movement_block.png"
 
 const spr_house_floor_misc = new Image()
 spr_house_floor_misc.src = "/static/sprites/house_floor_misc.png"
@@ -28,7 +28,7 @@ const spr_weapons_1 = new Image()
 spr_weapons_1.src = "/static/sprites/weapons.png"
 
 file_source_images = {
-    'sprites/water.gif': spr_ground_3,
+    'sprites/shallow_water.png': spr_ground_3,
     'sprites/1.png': spr_ground_1,
     'sprites/2.png': spr_ground_2,
     'sprites/weapons.png': spr_weapons_1,
@@ -38,10 +38,8 @@ file_source_images = {
 }
 
 let sprite_list = null
-
-console.log(sprite_list)
 function get_sprite_info(id){
-    return {
+    let ret = {
         'file': file_source_images[sprite_list['tile_set'][id]['file']],
         'pos': {
             'x': sprite_list['tile_set'][id]['pos']['x'],
@@ -52,6 +50,13 @@ function get_sprite_info(id){
             'height': sprite_list['tile_set'][id]['size']['height'],
         }
     }
+
+    if ('properties' in sprite_list['tile_set'][id]){
+        for (let property in sprite_list['tile_set'][id]['properties']){
+            ret[property] = sprite_list['tile_set'][id]['properties'][property]
+        }
+    }
+    return ret
 }
 
 const weapons_sprite_list = {
