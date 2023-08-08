@@ -1,7 +1,7 @@
 class Inventory {
     constructor(bag=null) {
         this.html_element = document.getElementById("inventory")
-        this.inventory_starting_width = game_width/3 + "px"
+        this.inventory_starting_width = inventory.style.width = `${square_width*4}px`
         this.left_hand = null
         this.right_hand = null
         this.legs = null

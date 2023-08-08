@@ -41,15 +41,15 @@
                 <div id="game_bar_left" class="hidden py-4 px-3">
                     <ul class="text-center">
                         <li id="game_bar_left_equipment" class="bg-blue-500">
-                            <button class="p-2 btn w-full">I</button>
+                            <button onclick="player_inventory.toggle()" class="py-2 btn w-full">INV</button>
                         </li>
 
                         <li class="my-5 bg-blue-500">
-                            <button class="p-2 w-full">E</button>
+                            <button onclick="player_attributes.toggle()" class="py-2 btn w-full">CHR</button>
                         </li>
 
                         <li class="bg-blue-500">
-                            <button class="p-2 w-full">E</button>
+                            <button class="py-2 w-full">E</button>
                         </li>
                     </ul>
                 </div>
@@ -97,6 +97,32 @@
                     <canvas class="hidden" id="canvas_players">
 
                     </canvas>
+
+                    <div class="p-3 hidden" id="player_attributes">
+                        <p class="my-2 bg-neutral-200"><span id="attr_name"></span>, <span id="attr_vocation"></span></p>
+                        <p class="relative my-2 bg-neutral-200">
+
+                            <span class="absolute bar-content">
+                                <span id="bar_progress_level" class="absolute bar">.</span>
+                                <span class="absolute bar-description">
+                                    <span class="span-top">Level:</span>
+                                    <span class="span-top" id="attr_level"></span>
+                                    <span class="span-top">(exp:</span>
+                                    <span class="span-top" id="attr_experience"></span>
+                                    <span class="span-top">)</span>
+                                </span>
+
+                            </span>
+
+
+                        </p>
+                        <p class="my-2 bg-green-300">Skills</p>
+                        <p class="my-2 bg-red-300">Fist Fighting: <span id="attr_skill_fist"></span></p>
+                        <p class="my-2 bg-red-300">Club Fighting: <span id="attr_skill_club"></span></p>
+                        <p class="my-2 bg-red-300">Sword Fighting: <span id="attr_skill_sword"></span></p>
+                        <p class="my-2 bg-red-300">Axe Fighting: <span id="attr_skill_axe"></span></p>
+                        <p class="my-2 bg-red-300">Sheilding: <span id="attr_skill_shielding"></span></p>
+                    </div>
 
                     <div class="" id="inventory">
                         <div class="equipment test p-2">
@@ -168,11 +194,6 @@
                     <div id="messages"></div>
                 </div>
 
-
-
-
-
-
                 <ul class="character_list">
                     {% if characters %}
                     <p class="pt-3">Choose your character:</p>
@@ -198,6 +219,7 @@
 <script src="{% static 'classes/game_bar.js' %}"></script>
 <script src="{% static 'classes/screen.js' %}"></script>
 <script src="{% static 'classes/worldmap.js' %}"></script>
+<script src="{% static 'classes/player_attributes.js' %}"></script>
 <script src="{% static 'classes/inventory.js' %}"></script>
 <script src="{% static 'classes/player.js' %}"></script>
 <script src="{% static 'classes/item.js' %}"></script>

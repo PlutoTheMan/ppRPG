@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from play.map import worldmap
-
+import math
+from play.game_settings import *
 # Create your models here.
 class Character(models.Model):
     """Representing account's character."""
@@ -23,6 +24,86 @@ class Character(models.Model):
     pos_y = models.IntegerField(default=9)
     logged_in_game = models.BooleanField(default=False)
     direction = models.IntegerField(default=2)
+
+    def local_get_exp_required_for_level(self, n):
+        return math.floor((10000 / CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL) * ((1 + CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL / 100) ** (n - 1) - 1))
+    async def get_exp_required_for_level(self, n):
+        # req = math.floor((10000/CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL) * (1.10 ** (n - 1) - 1))
+        req = math.floor((10000/CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL) * ((1 + CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL/100) ** (n - 1) - 1))
+        await self.consumer.get_exp_required_for_level(req)
+
+    def get_exp_required_to_level_up(self, n):
+        req = math.floor((10000/CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL) * ((1 + CONF_EXP_PERCENTAGE_FOR_NEXT_LEVEL/100) ** (n - 1) - 1))
+        return req
+
+    def should_level_up(self, experience):
+        level_ups = 0
+        experience_pool = experience
+        pool_used = 0
+        # print(f'exp pool: {experience_pool}')
+        # print(f'exp now: {self.experience}')
+
+        if experience > 0:
+            while experience_pool > 0:
+                exp_required_to_lvl_up = self.get_exp_required_to_level_up(self.level+level_ups + 1) - self.experience - pool_used
+                if experience_pool >= exp_required_to_lvl_up:
+                    experience_pool -= exp_required_to_lvl_up
+                    pool_used += exp_required_to_lvl_up
+                    level_ups += 1
+                else:
+                    break
+        elif experience < 0:
+            print("SHOULD LEVEL DOWN?")
+            looped = 0
+            while experience_pool < 0:
+                looped += 1
+                print(f'exp pool: {experience_pool}')
+                exp_required_to_lvl_down = -(self.experience - self.get_exp_required_to_level_up(self.level+level_ups) + 1 + pool_used)
+                print(f'exp req to lvl down: {exp_required_to_lvl_down}')
+                if self.level + level_ups == 0:
+                    break
+                if experience_pool <= exp_required_to_lvl_down:
+                    experience_pool -= exp_required_to_lvl_down
+                    pool_used += exp_required_to_lvl_down
+                    level_ups -= 1
+                else:
+                    break
+
+        print(f'level ups gained: {level_ups}')
+        return level_ups
+
+    async def get_experience(self, experience_points):
+        value = 0
+        levels_gained = 0
+
+        if self.experience + experience_points < 0:
+            value = -self.experience
+            self.experience = 0
+            levels_gained = -self.level + 1
+            self.level = 1
+            await self.consumer.send_level_limits(
+                self.local_get_exp_required_for_level(self.level),
+                self.local_get_exp_required_for_level(self.level + 1)
+            )
+        else:
+            levels_gained = self.should_level_up(experience_points)
+            self.experience += experience_points
+            if levels_gained > 0:
+                self.level += levels_gained
+                await self.consumer.send_level_limits(
+                    self.local_get_exp_required_for_level(self.level),
+                    self.local_get_exp_required_for_level(self.level + 1)
+                )
+            elif levels_gained < 0:
+                self.level += levels_gained
+                await self.consumer.send_level_limits(
+                    self.local_get_exp_required_for_level(self.level),
+                    self.local_get_exp_required_for_level(self.level + 1)
+                )
+
+            value = experience_points
+
+        await self.consumer.get_experience(value, levels_gained)
 
     async def attempt_item_drag(self, data):
         """

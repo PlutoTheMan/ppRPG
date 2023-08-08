@@ -89,6 +89,7 @@ def select_character(request, name):
 
     character = account.get_character(name)
     bag = {}
+    skills = {}
 
     if character.equipment.bag_0:
         bag['bag_0'] = {}
@@ -98,16 +99,26 @@ def select_character(request, name):
         bag['bag_1'] = {}
         bag['bag_1']['game_id'] = character.equipment.bag_1.game_id
 
+    if character.skills:
+        skills['fist'] = character.skills.fist
+        skills['sword'] = character.skills.sword
+        skills['club'] = character.skills.club
+        skills['axe'] = character.skills.axe
+        skills['shielding'] = character.skills.shielding
+
     content = {
         'name': character.name,
         'banned': character.banned,
         'vocation': character.vocation,
         'level': character.level,
         'experience': character.experience,
+        'exp_for_this_level': character.local_get_exp_required_for_level(character.level),
+        'exp_for_next_level': character.local_get_exp_required_for_level(character.level+1),
         'pos_x': character.pos_x,
         'pos_y': character.pos_y,
         'direction': character.direction,
         'bag': bag,
+        'skills': skills,
     }
 
     response = {

@@ -12,6 +12,9 @@ spr_ground_2.src = "/static/sprites/2.png"
 const spr_ground_3 = new Image()
 spr_ground_3.src = "/static/sprites/shallow_water.png"
 
+const spr_ground_4 = new Image()
+spr_ground_4.src = "/static/sprites/lava.png"
+
 const spr_movement_block = new Image()
 spr_movement_block.src = "/static/sprites/movement_block.png"
 
@@ -29,6 +32,7 @@ spr_weapons_1.src = "/static/sprites/weapons.png"
 
 file_source_images = {
     'sprites/shallow_water.png': spr_ground_3,
+    'sprites/lava.png': spr_ground_4,
     'sprites/1.png': spr_ground_1,
     'sprites/2.png': spr_ground_2,
     'sprites/weapons.png': spr_weapons_1,

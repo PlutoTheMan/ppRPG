@@ -58,9 +58,16 @@ class Chat{
     send_message(){
         let message = this.form.message.value
 
-        gameSocket.send(JSON.stringify(
-            {'message': message}
-        ))
+        // Getting rid of slash for the server
+        if(message.indexOf('/') === 0) {
+            gameSocket.send(JSON.stringify(
+                {'command': message.substring(1)}
+            ))
+        } else {
+            gameSocket.send(JSON.stringify(
+                {'message': message}
+            ))
+        }
 
         this.form.reset()
     }

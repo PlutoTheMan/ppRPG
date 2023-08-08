@@ -2,15 +2,20 @@ var test = 0
 
 class Player {
     constructor(data) {
+        console.log(data)
         this.name = data.player_info.name
         this.level = data.player_info.level
         this.experience = data.player_info.experience
+        this.exp_required_for_this_level = data.player_info.exp_for_this_level
+        this.exp_required_for_next_level = data.player_info.exp_for_next_level
         this.vocation = data.player_info.vocation
         this.pos = {
             x: data.player_info.pos_x,
             y: data.player_info.pos_y,
         }
         this.drawPos = screen.getSquareCords(5, 5)
+
+        this.skills = data.player_info.skills
 
         this.draw_nickname = true
         this.draw_position = true
@@ -37,6 +42,19 @@ class Player {
         this.interval_move = null
     }
 
+    vocation_to_name(voc_num){
+        switch (voc_num){
+            case 0:
+                return "No vocation"
+                break
+            case 1:
+                return "Warrior"
+                break
+            case 2:
+                return "Mage"
+                break
+        }
+    }
     update_draw_pos(){
         this.drawPos = screen.getSquareCords(5, 5)
     }
@@ -253,6 +271,12 @@ class MainPlayer extends Player {
 
         this.action_send_delay = 50
         this.action_send_last_send = Date.now() - this.action_send_delay
+
+        game_bar.updateProgress(game_bar.bar_level,
+            this.exp_required_for_this_level,
+            this.exp_required_for_next_level,
+            this.experience
+        )
     }
 
     init_listener(){
@@ -329,6 +353,21 @@ class MainPlayer extends Player {
         if (this.pressing_move_left){
             this._move(3)
         }
+    }
+
+    add_level(levels){
+        this.level += levels
+        player_attributes.update_level()
+    }
+
+    add_experience(experience){
+        game_bar.updateProgress(game_bar.bar_level,
+            this.exp_required_for_this_level,
+            this.exp_required_for_next_level,
+            this.experience + experience
+        )
+        this.experience += experience
+        player_attributes.update_experience()
     }
     _move(direction){
         if (!this.moving){

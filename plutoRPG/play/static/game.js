@@ -10,6 +10,7 @@ let ground = null
 let mouse = null
 let game_settings = null
 let game_bar = null
+let player_attributes = null
 
 async function get_characters() {
     const response = await fetch("get_characters");
@@ -69,6 +70,7 @@ function load_game(content){
     ground = new Ground()
     mouse = new Mouse()
     game_settings = new Settings()
+    player_attributes = new PlayerAttributes()
 
     ground.fps_start
     window.requestAnimationFrame(animate)

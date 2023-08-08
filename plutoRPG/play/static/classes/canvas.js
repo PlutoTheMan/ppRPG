@@ -36,14 +36,19 @@ const game_grid = document.getElementById("game_grid")
 const content_wrap = document.querySelector(".content_wrap")
 
 const inventory = document.getElementById("inventory")
+const html_player_attributes = document.getElementById("player_attributes")
 
 canvas.width = canvas_players.width = canvas_ground.width = canvas_items.width = game_width
 canvas.height = canvas_players.height =  canvas_ground.height = canvas_items.height = game_height
 
 character_ui.style.height = `${game_height}px`
 character_ui.style.width = `${game_width}px`
-inventory.style.width = `${game_width/3}px`
+inventory.style.width = `${square_width*4}px`
 inventory.style.height = `${game_height}px`
+
+html_player_attributes.style.width = `${game_width/2}px`
+// html_player_attributes.style.width = `100px`
+html_player_attributes.style.height = `${game_height*2}px`
 
 
 const html_characters_list = document.querySelector(".character_list")

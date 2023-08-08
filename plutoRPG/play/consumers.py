@@ -3,10 +3,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from characters.models import Account, Character
 from .map import worldmap
+from .commands import *
 
 class ChatConsumer(AsyncWebsocketConsumer):
     all_users = {}
     connected_players = {}
+
     async def connect(self):
         user_id = self.scope["user"].id
         self.account = await get_account(user_id)
@@ -55,14 +57,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         ChatConsumer.all_users.pop(self.account, None)
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def send_connection_message(self):
-        try:
-            msg = f'{self.character.name} has joined.'
-            await self.channel_layer.group_send(self.room_group_name, {
-                "type": "request_chat_global", "message": msg, "context": "connect"})
-        except Exception:
-            print("Skipping sending disconnect msg - error occured.")
-
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if "message" in text_data_json:
@@ -73,6 +67,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(self.room_group_name, {
                     "type": "request_chat_global", "message": message, "author": self.character.name
                 })
+        elif "command" in text_data_json:
+            try:
+                command = str(text_data_json["command"])
+                command_core = command.split(" ", 1)[0]
+                if command_core in server_commands:
+                    command_value = None
+                    try:
+                        command_value = command.split(" ", 1)[1].strip()
+                        await server_commands[command_core](self, command_value)
+                    except Exception:
+                        await server_commands[command_core](self)
+                else:
+                    await self.send_command_status(server_commands_status['ERR_NOT_EXISTENT'])
+            except Exception as e:
+                print(e)
         elif "move" in text_data_json:
             if self.character.can_move(text_data_json["move"]):
                 self.character.move(text_data_json["move"])
@@ -109,6 +118,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         elif "drag" in text_data_json:
             await self.character.attempt_item_drag(text_data_json['drag'])
 
+    async def send_connection_message(self):
+        try:
+            msg = f'{self.character.name} has joined.'
+            await self.channel_layer.group_send(self.room_group_name, {
+                "type": "request_chat_global", "message": msg, "context": "connect"})
+        except Exception:
+            print("Skipping sending disconnect msg - error occured.")
+
     async def request_self_view(self):
         pos_x = self.character.pos_x
         pos_y = self.character.pos_y
@@ -121,6 +138,37 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'view': client_view
         }))
 
+    async def send_command_status(self, status):
+        await self.send(text_data=json.dumps({
+            'type': 'command_err',
+            'data': status,
+        }))
+
+    async def send_level_limits(self, exp_min, exp_max):
+        await self.send(text_data=json.dumps({
+            'type': 'level_limit_change',
+            'data_exp_min': exp_min,
+            'data_exp_max': exp_max,
+        }))
+
+    async def get_experience(self, experience_points, levels_gained):
+        await self.send(text_data=json.dumps({
+            'type': 'experience_gain',
+            'data_experience': experience_points,
+            'data_levels': levels_gained,
+        }))
+
+    async def get_exp_required_for_level(self, experience_points):
+        await self.send(text_data=json.dumps({
+            'type': 'experience_required_for_level',
+            'data': experience_points,
+        }))
+
+    async def send_commands_list(self, commands):
+        await self.send(text_data=json.dumps({
+            "type": "commands_list",
+            "data": commands
+        }))
     async def send_view_to_players(self, pos):
         players_list_to_get_view = worldmap.vision_map[pos]
         for player in players_list_to_get_view:
